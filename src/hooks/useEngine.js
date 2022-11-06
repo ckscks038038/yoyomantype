@@ -4,8 +4,8 @@ import useCountdownTimer from './useCountdownTimer';
 import useTypings from './useTypings';
 import { countErrors } from '../utils/helper';
 
-const NUMBER_OF_WORDS = 5;
-const COUNTDOWN_SECONDS = 25;
+const NUMBER_OF_WORDS = 15;
+const COUNTDOWN_SECONDS = 30;
 
 const useEngine = () => {
   const [state, setState] = useState('start');

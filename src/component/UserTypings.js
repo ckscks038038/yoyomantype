@@ -3,17 +3,19 @@ import Caret from './Caret';
 
 const UserTypings = ({ userInput, className, words }) => {
   const typedCharacters = userInput.split('');
+  const wordSplit = words.split('');
+
+  const userTypeLength = typedCharacters.length;
+
   return (
     <div className={className}>
-      {typedCharacters.map((char, index) => {
-        return (
-          <Character
-            key={`${char}_${index}`}
-            actual={char}
-            expected={words[index]}
-          />
-        );
-      })}
+      {typedCharacters.map((char, index) => (
+        <Character
+          key={`${char}_${index}`}
+          actual={char}
+          expected={words[index]}
+        />
+      ))}
       <Caret />
     </div>
   );

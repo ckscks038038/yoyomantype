@@ -1,11 +1,34 @@
-import './App.css';
-
+import Replay from './component/replay';
 import RestartButton from './component/RestartButton';
 import Results from './component/Results';
 import UserTypings from './component/UserTypings';
 import useEngine from './hooks/useEngine';
 import { calculateAccuracyPercentage } from './utils/helper';
 
+const ans = 'abcdefgstop';
+const temp = [
+  { time: 0, word: 'a' },
+  { time: 100, word: 'a' },
+  { time: 100, word: 'a' },
+  { time: 100, word: 'a' },
+  { time: 100, word: 'a' },
+  { time: 1000, word: 'x' },
+  { time: 500, word: 'x' },
+  { time: 500, word: 'x' },
+  { time: 1000, word: 'a' },
+  { time: 1000, word: 'x' },
+  { time: 1000, word: 'a' },
+  { time: 1000, word: 'x' },
+  { time: 1000, word: '\xa0' },
+  { time: 100, word: '\xa0' },
+  { time: 200, word: '\xa0' },
+  { time: 200, word: '\xa0' },
+  { time: 200, word: '\xa0' },
+  { time: 200, word: '\xa0' },
+  { time: 200, word: '\xa0' },
+  { time: 100, word: 'a' },
+  { time: 100, word: 'a' },
+];
 function App() {
   const { state, words, timeLeft, typed, errors, restart, totalTyped } =
     useEngine();
@@ -32,6 +55,7 @@ function App() {
         accuracyPercentage={calculateAccuracyPercentage(errors, totalTyped)}
         total={totalTyped}
       />
+      <Replay className="mt-10" state={state} text={temp} ans={ans} />
     </>
   );
 }

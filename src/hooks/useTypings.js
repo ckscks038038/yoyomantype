@@ -28,6 +28,14 @@ const useTypings = (enabled) => {
           totalTyped.current -= 1;
           break;
         default:
+          /**
+           * 紀錄按下字的時間以及按下的字為何,
+           * 儲存資料到TimescaleDB
+           */
+
+          const d = new Date();
+          console.log('key pressed:', key);
+          console.log('current time:', d);
           setTyped((prev) => prev.concat(key));
           setCursor((prev) => prev + 1);
           totalTyped.current += 1;
