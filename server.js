@@ -18,6 +18,14 @@ app.get('/', async (req, res) => {
     console.log(err.stack);
   }
 });
+
+app.post('/todos', async (req, res) => {
+  try {
+    console.log(req.body);
+  } catch (err) {
+    console.log(err);
+  }
+});
 app.listen(port, () =>
   console.log(`Example app listening at http://localhost:${port}`)
 );
