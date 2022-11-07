@@ -1,11 +1,8 @@
 import cn from 'classnames';
 import Caret from './Caret';
 
-const UserTypings = ({ userInput, className, words }) => {
+const UserTypings = ({ userInput, className, words, state }) => {
   const typedCharacters = userInput.split('');
-  const wordSplit = words.split('');
-
-  const userTypeLength = typedCharacters.length;
 
   return (
     <div className={className}>
@@ -16,7 +13,10 @@ const UserTypings = ({ userInput, className, words }) => {
           expected={words[index]}
         />
       ))}
-      <Caret />
+
+      {state !== 'finish' ? (
+        <Caret className={'inline-block h-7 w-0.5 bg-primary-500'} />
+      ) : null}
     </div>
   );
 };

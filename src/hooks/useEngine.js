@@ -4,17 +4,16 @@ import useCountdownTimer from './useCountdownTimer';
 import useTypings from './useTypings';
 import { countErrors } from '../utils/helper';
 
-const NUMBER_OF_WORDS = 15;
-const COUNTDOWN_SECONDS = 30;
+const NUMBER_OF_WORDS = 30;
+const COUNTDOWN_SECONDS = 15;
 
 const useEngine = () => {
   const [state, setState] = useState('start');
   const { words, updateWords } = useWords(NUMBER_OF_WORDS);
   const { timeLeft, startCountdown, resetCountdown } =
     useCountdownTimer(COUNTDOWN_SECONDS);
-  const { typed, cursor, clearTyped, resetTotalTyped, totalTyped } = useTypings(
-    state !== 'finish'
-  );
+  const { typed, cursor, clearTyped, resetTotalTyped, totalTyped, replay } =
+    useTypings(state !== 'finish');
 
   const [errors, setErrors] = useState(0);
 
@@ -63,7 +62,7 @@ const useEngine = () => {
     }
   }, [clearTyped, areWordsFinished, updateWords, sumErrors]);
 
-  return { state, words, typed, errors, restart, timeLeft, totalTyped };
+  return { state, words, typed, errors, restart, timeLeft, totalTyped, replay };
 };
 
 export default useEngine;

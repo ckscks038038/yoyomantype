@@ -3,18 +3,35 @@ import React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import Caret from './Caret';
 
-const Replay = ({ state, text, ans }) => {
+const Replay = ({ state, ans, replay }) => {
   const [currentWord, setCurrentWord] = useState('');
   const index = useRef(0);
+  // console.log(replay);
+  const time = useRef(0);
+  const base = useRef(0);
+  const baseMilisecondTime = 500;
 
   useEffect(() => {
-    const word = text[index.current] ? text[index.current].word : '';
-    const time = text[index.current] ? text[index.current].time : 0;
-
     const timeoutId = setTimeout(() => {
       //寫判斷：Backspace, space要如何處理？
       if (state === 'finish') {
-        if (word === 'x') {
+        // 修正time interval
+        const c = replay[index.current] ? replay[index.current].time : 0;
+
+        if (index.current === 0) {
+          base.current = c;
+          // console.log(base.current);
+          time.current = baseMilisecondTime;
+        } else {
+          time.current = c;
+          time.current = (time.current - base.current) % 10000;
+
+          base.current = c;
+        }
+
+        const word = replay[index.current] ? replay[index.current].word : '';
+
+        if (word === 'Backspace') {
           setCurrentWord((prev) => {
             return prev.slice(0, -1);
           });
@@ -25,13 +42,19 @@ const Replay = ({ state, text, ans }) => {
         }
 
         index.current += 1;
+
+        // 首次進入遊戲、重新遊戲 => 清空原本紀錄
+      } else if (state === 'start') {
+        index.current = 0;
+        base.current = 0;
+        setCurrentWord('');
       }
-    }, time);
+    }, time.current);
 
     return () => {
       clearTimeout(timeoutId);
     };
-  }, [currentWord, text, state]);
+  }, [currentWord, replay, state]);
 
   const typedCharacters = currentWord.split('');
 
@@ -39,7 +62,7 @@ const Replay = ({ state, text, ans }) => {
     return null;
   } else {
     return (
-      <div className={' inset-0'}>
+      <div className={' inset-0 w-1/2 break-all'}>
         {typedCharacters.map((char, index) => {
           return (
             <Character
@@ -49,7 +72,7 @@ const Replay = ({ state, text, ans }) => {
             />
           );
         })}
-        <Caret />
+        <Caret className={'inline-block h-4 w-0.5 bg-primary-500'} />
       </div>
     );
   }

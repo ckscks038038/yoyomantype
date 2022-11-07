@@ -14,12 +14,20 @@ const useTypings = (enabled) => {
   const [cursor, setCursor] = useState(0);
   const [typed, setTyped] = useState('');
   const totalTyped = useRef(0);
-
+  const [replay, setReplay] = useState([]);
   const keydownHandler = useCallback(
     ({ key, code }) => {
       if (!enabled || !isKeyboardCodeAllowed(code)) {
         return;
       }
+      /**
+       * 紀錄按下字的時間以及按下的字為何,
+       * 儲存資料到localstorage
+       */
+      setReplay((prev) => {
+        const currentreplay = { word: key, time: Date.now() };
+        return [...prev, currentreplay];
+      });
 
       switch (key) {
         case 'Backspace':
@@ -28,25 +36,19 @@ const useTypings = (enabled) => {
           totalTyped.current -= 1;
           break;
         default:
-          /**
-           * 紀錄按下字的時間以及按下的字為何,
-           * 儲存資料到TimescaleDB
-           */
-
-          const d = new Date();
-          console.log('key pressed:', key);
-          console.log('current time:', d);
           setTyped((prev) => prev.concat(key));
           setCursor((prev) => prev + 1);
           totalTyped.current += 1;
       }
     },
-    [cursor, enabled]
+    [enabled]
   );
 
+  //重設replay儲存、打字紀錄、cursor位置
   const clearTyped = useCallback(() => {
     setTyped('');
     setCursor(0);
+    setReplay('');
   }, []);
 
   const resetTotalTyped = useCallback(() => {
@@ -68,6 +70,7 @@ const useTypings = (enabled) => {
     clearTyped,
     resetTotalTyped,
     totalTyped: totalTyped.current,
+    replay,
   };
 };
 
