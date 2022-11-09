@@ -1,60 +1,26 @@
-import Replay from './component/Replay';
 import MultiPlayerButton from './component/MultiPlayerButton';
-import RestartButton from './component/RestartButton';
-import Results from './component/Results';
-import UserTypings from './component/UserTypings';
-import useEngine from './hooks/useEngine';
-import { calculateAccuracyPercentage } from './utils/helper';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import MultiplayerPage from './component/MultiplayerPage';
+import Homepage from './component/Homepage';
+import KeyboardButton from './component/KeyboardButton';
 
 function App() {
-  const { state, words, timeLeft, typed, errors, restart, totalTyped, replay } =
-    useEngine();
-
   return (
-    <>
-      <MultiPlayerButton className={'mx-auto  text-slate-500'} />
-      <CountdownTimer timeLeft={timeLeft} />
-      <WordsContainer>
-        <GeneratedWords words={words} />
-        <UserTypings
-          className="absolute inset-0"
-          userInput={typed}
-          words={words}
-          state={state}
-        />
-      </WordsContainer>
-      <RestartButton
-        className={'mx-auto mt-10 text-slate-500'}
-        handleRestart={restart}
-      />
-      <Results
-        state={state}
-        className="mt-10"
-        errors={errors}
-        accuracyPercentage={calculateAccuracyPercentage(errors, totalTyped)}
-        total={totalTyped}
-      />
-
-      <div className="mt-10 text-slate-500">Replay</div>
-      <Replay className="mt-10" state={state} ans={words} replay={replay} />
-    </>
+    <Router>
+      <nav className="mb-8 flex">
+        <Link to="/">
+          <KeyboardButton className={'mx-auto mt-10 text-slate-500'} />
+        </Link>
+        <Link to="/multiplayer">
+          <MultiPlayerButton className={'mx-auto mt-10 text-slate-500'} />
+        </Link>
+      </nav>
+      <Routes>
+        <Route path="/" element={<Homepage />} />
+        <Route path="/multiplayer" element={<MultiplayerPage />} />
+      </Routes>
+    </Router>
   );
 }
-
-const GeneratedWords = ({ words }) => {
-  return <div className=" text-slate-500">{words}</div>;
-};
-
-const CountdownTimer = ({ timeLeft }) => {
-  return <h2 className="font-medium text-primary-400">Time: {timeLeft}</h2>;
-};
-
-const WordsContainer = ({ children }) => {
-  return (
-    <div className="relative mt-3 max-w-7xl break-words text-3xl leading-relaxed">
-      {children}
-    </div>
-  );
-};
 
 export default App;
