@@ -1,5 +1,9 @@
 const express = require('express');
 const app = express();
+const http = require('http');
+const server = http.createServer(app);
+const { Server } = require('socket.io');
+const io = new Server(server);
 const port = 3300;
 const db = require('./utils/pg');
 
@@ -26,6 +30,12 @@ app.post('/todos', async (req, res) => {
     console.log(err);
   }
 });
-app.listen(port, () =>
+
+// socket io
+io.on('connection', (socket) => {
+  console.log('a user connected');
+});
+
+server.listen(port, () =>
   console.log(`Example app listening at http://localhost:${port}`)
 );

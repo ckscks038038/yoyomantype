@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 
 const Caret = ({ className }) => {
   return (
-    <motion.div
+    <motion.span
       aria-hidden={true}
       initial={{ opacity: 1 }}
       animate={{ opacity: 0 }}

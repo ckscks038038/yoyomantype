@@ -1,4 +1,5 @@
-import Replay from './component/replay';
+import Replay from './component/Replay';
+import MultiPlayerButton from './component/MultiPlayerButton';
 import RestartButton from './component/RestartButton';
 import Results from './component/Results';
 import UserTypings from './component/UserTypings';
@@ -11,6 +12,7 @@ function App() {
 
   return (
     <>
+      <MultiPlayerButton className={'mx-auto  text-slate-500'} />
       <CountdownTimer timeLeft={timeLeft} />
       <WordsContainer>
         <GeneratedWords words={words} />
@@ -40,7 +42,7 @@ function App() {
 }
 
 const GeneratedWords = ({ words }) => {
-  return <div className="  text-slate-500">{words}</div>;
+  return <div className=" text-slate-500">{words}</div>;
 };
 
 const CountdownTimer = ({ timeLeft }) => {
@@ -49,7 +51,7 @@ const CountdownTimer = ({ timeLeft }) => {
 
 const WordsContainer = ({ children }) => {
   return (
-    <div className="relative mt-3 max-w-7xl break-all text-3xl leading-relaxed">
+    <div className="relative mt-3 max-w-7xl break-words text-3xl leading-relaxed">
       {children}
     </div>
   );
