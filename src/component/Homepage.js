@@ -33,7 +33,7 @@ function Homepage() {
         total={totalTyped}
       />
 
-      <div className="mt-10 text-slate-500">Replay</div>
+      <div className=" text-slate-500">Replay</div>
       <Replay className="mt-10" state={state} ans={words} replay={replay} />
     </>
   );

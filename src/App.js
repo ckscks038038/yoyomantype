@@ -3,10 +3,11 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import MultiplayerPage from './component/MultiplayerPage';
 import Homepage from './component/Homepage';
 import KeyboardButton from './component/KeyboardButton';
+import Gamepage from './component/Gamepage';
 
 function App() {
   return (
-    <Router>
+    <>
       <nav className="mb-8 flex">
         <Link to="/">
           <KeyboardButton className={'mx-auto mt-10 text-slate-500'} />
@@ -18,8 +19,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Homepage />} />
         <Route path="/multiplayer" element={<MultiplayerPage />} />
+        <Route path="/multiplayer/:id" element={<Gamepage />} />
       </Routes>
-    </Router>
+    </>
   );
 }
 

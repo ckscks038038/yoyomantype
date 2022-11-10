@@ -5,7 +5,7 @@ import useTypings from './useTypings';
 import { countErrors } from '../utils/helper';
 
 const NUMBER_OF_WORDS = 30;
-const COUNTDOWN_SECONDS = 3000;
+const COUNTDOWN_SECONDS = 20;
 
 const useEngine = () => {
   const [state, setState] = useState('start');

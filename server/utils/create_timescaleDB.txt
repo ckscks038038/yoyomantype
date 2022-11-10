@@ -1,0 +1,14 @@
+CREATE TABLE [IF NOT EXISTS] replay (
+   column1 datatype(length) column_contraint,
+   column2 datatype(length) column_contraint,
+   column3 datatype(length) column_contraint,
+   table_constraints
+);
+
+
+CREATE TABLE [IF NOT EXISTS] replay_time (
+  time TIMESTAMPTZ NOT NULL,
+  symbol TEXT NOT NULL,
+  price DOUBLE PRECISION NULL,
+  day_volume INT NULL
+);

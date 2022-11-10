@@ -7,7 +7,6 @@ const generateWords = (count) => {
 
 const useWords = (count) => {
   const [words, setWords] = useState(generateWords(count));
-
   const updateWords = useCallback(() => {
     console.log('here!!! updateWords');
     setWords(generateWords(count));
