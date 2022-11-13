@@ -9,82 +9,84 @@ const { findRooms } = require('./utils/helper');
 const io = new Server(server, { cors: true });
 const { PORT, API_VERSION } = process.env;
 const port = PORT;
-const db = require('./utils/pg');
-const roomSet = new Set();
+const {
+  JoinRoomToMap,
+  createNewRoomToMap,
+  checkRoomIdExistInMap,
+  findAllRoomsInMap,
+  saveArticleToMap,
+  getArticleFromMap,
+} = require('./server/utils/roomMap');
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // API routes
-// app.use('/api/' + API_VERSION, [require('./server/routes/words_route')]);
-
-app.get('/', async (req, res) => {
-  try {
-    const query = `
-CREATE TABLE users (
-    email varchar,
-    firstName varchar,
-    lastName varchar,
-    age int
-);
-`;
-    const ans = await db.query(query);
-    return res.json(ans.rows);
-  } catch (err) {
-    console.log(err.stack);
-  }
-});
-
-app.post('/todos', async (req, res) => {
-  try {
-    console.log(req.body);
-  } catch (err) {
-    console.log(err);
-  }
-});
+app.use('/api/' + API_VERSION, [
+  require('./server/routes/words_route'),
+  require('./server/routes/multiplayer_route'),
+]);
 
 // socket io
 io.on('connection', (socket) => {
-  //紀錄當前的rooms
-
-  //監聽透過 connection 傳進來的事件
-  socket.on('getMessage', (message) => {
-    //回傳 message 給發送訊息的 Client
-    socket.emit('getMessage', message);
-    console.log('使用者所在房間..', findRooms(socket));
-    console.log('server管理所有房間', roomSet);
-  });
+  //創建新房間
   socket.on('create room', (roomId) => {
+    createNewRoomToMap({ roomId: roomId, ownerId: socket.id });
     socket.join(roomId);
     console.log(`使用者${socket.id}創建了room #${roomId}`);
-    roomSet.add(roomId);
   });
-  socket.on('join room', (roomId) => {
-    if (roomSet.has(roomId)) {
-      socket.join(roomId);
+
+  //儲存文章
+  socket.on('save article', ({ roomId, words }) => {
+    saveArticleToMap(roomId, words);
+  });
+
+  //確認存在房間
+  socket.on('check room', (roomId) => {
+    if (checkRoomIdExistInMap(roomId)) {
+      console.log(`檢查結果:存在${roomId}`);
       socket.emit('join auth', { auth: true });
-      console.log(`使用者${socket.id}加入了room #${roomId}`);
     } else {
-      console.log(`沒有roomId #${roomId}`);
+      console.log(`檢查結果:不存在roomId ${roomId}`);
       socket.emit('join auth', { auth: false });
     }
   });
 
-  //當使用者斷線，要做leave room 動作
+  //加入房間
+  socket.on('join room', (roomId) => {
+    if (checkRoomIdExistInMap(roomId)) {
+      socket.join(roomId);
+      JoinRoomToMap({ roomId: roomId, userId: socket.id });
+      console.log(`使用者${socket.id}加入了room #${roomId}`);
+
+      //回傳文章給guest
+      socket.emit('get article', getArticleFromMap(roomId));
+    } else {
+      console.log(`不存在roomId ${roomId}`);
+    }
+  });
+
+  // 當使用者斷線，要做leave room 動作
   socket.on('disconnect', function () {
+    findAllRoomsInMap;
     let nowRoom = findRooms(socket);
-    console.log('離開前所有room...', nowRoom);
+    console.log('目前所有room...', nowRoom);
     //從roomSet中移除該room
 
     nowRoom.forEach((room) => {
       console.log(room);
     });
-    socket.leave(nowRoom);
-    nowRoom = findRooms(socket);
-    console.log('離開所有room...', nowRoom);
-    console.log('user disconnected');
+    // socket.leave(nowRoom);
+    // nowRoom = findRooms(socket);
+    // console.log('離開所有room...', nowRoom);
+    // console.log('user disconnected');
   });
+});
+
+app.use(function (err, req, res, next) {
+  console.log(err);
+  res.status(500).send('Internal Server Error');
 });
 
 server.listen(port, () =>

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import webSocket from 'socket.io-client';
 import { TiChevronRight } from 'react-icons/ti';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 const { v4: uuidv4 } = require('uuid');
 const io = webSocket('http://localhost:3300');
 
@@ -26,26 +26,38 @@ const MultiplayerPage = () => {
   // 使用者可以創建房間(房主)、加入房間(房客)
   const sendMessage = () => {
     //以 emit 送訊息，並以 getMessage 為名稱送給 server 捕捉
-    io.emit('getMessage', '我好帥');
+    io.emit('getMessage', '安安');
   };
+
+  //創建房間
   const createRoom = () => {
-    //以 emit 送訊息，並以 getMessage 為名稱送給 server 捕捉
+    // 創建roomID，並且紀錄在roomMap
     const roomId = uuidv4().slice(0, 6);
-    io.emit('create room', roomId);
-    navigate(`/multiplayer/${roomId}`);
+
+    navigate(`/multiplayer/${roomId}`, {
+      state: { identity: 'owner', roomId: roomId },
+    });
   };
-  const joinRoom = () => {
-    //以 emit 送訊息，並以 getMessage 為名稱送給 server 捕捉
+
+  //加入房間
+  const checkRoom = () => {
     const roomId = inputValue;
-    io.emit('join room', roomId);
+    io.emit('check room', roomId);
+
     io.on('join auth', ({ auth }) => {
       // auth success
       if (auth) {
-        navigate(`/multiplayer/${roomId}`);
+        navigate(`/multiplayer/${roomId}`, {
+          state: { identity: 'guest', roomId: roomId },
+        });
+      } else {
+        console.log('room does not exist');
       }
     });
+
     setinputValue('');
   };
+
   return (
     <WordsContainer>
       <input type="button" value="目前有的房間" onClick={sendMessage} />
@@ -67,7 +79,7 @@ const MultiplayerPage = () => {
         />
         <TiChevronRight
           type="button"
-          onClick={joinRoom}
+          onClick={checkRoom}
           className="h-6 w-6 rounded-md border-2 border-gray-800"
         />
       </div>

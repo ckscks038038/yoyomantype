@@ -4,7 +4,6 @@ import MultiplayerPage from './component/MultiplayerPage';
 import Homepage from './component/Homepage';
 import KeyboardButton from './component/KeyboardButton';
 import Gamepage from './component/Gamepage';
-
 function App() {
   return (
     <>

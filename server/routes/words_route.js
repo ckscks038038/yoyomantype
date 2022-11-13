@@ -1,5 +1,6 @@
 const router = require('express').Router();
+const { getWords } = require('../controllers/words_controller');
+const { wrapAsync } = require('../utils/serverHelper');
 
-const { wrapAsync } = require('../util/helper');
-router.route('/words').get(wrapAsync(getWords));
+router.route('/words').post(wrapAsync(getWords));
 module.exports = router;
