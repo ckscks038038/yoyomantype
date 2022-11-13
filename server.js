@@ -16,7 +16,10 @@ const {
   findAllRoomsInMap,
   saveArticleToMap,
   getArticleFromMap,
+  changeStartStateToMap,
+  changeFinishStateToMap,
 } = require('./server/utils/roomMap');
+const { SocketAddress } = require('net');
 
 app.use(cors());
 app.use(express.json());
@@ -35,11 +38,6 @@ io.on('connection', (socket) => {
     createNewRoomToMap({ roomId: roomId, ownerId: socket.id });
     socket.join(roomId);
     console.log(`使用者${socket.id}創建了room #${roomId}`);
-  });
-
-  //儲存文章
-  socket.on('save article', ({ roomId, words }) => {
-    saveArticleToMap(roomId, words);
   });
 
   //確認存在房間
@@ -67,21 +65,48 @@ io.on('connection', (socket) => {
     }
   });
 
-  // 當使用者斷線，要做leave room 動作
-  socket.on('disconnect', function () {
-    findAllRoomsInMap;
-    let nowRoom = findRooms(socket);
-    console.log('目前所有room...', nowRoom);
-    //從roomSet中移除該room
+  //開始遊戲
+  socket.on('start game', (roomId) => {
+    changeStartStateToMap(roomId);
+    //回傳文章給guest
 
-    nowRoom.forEach((room) => {
-      console.log(room);
-    });
-    // socket.leave(nowRoom);
-    // nowRoom = findRooms(socket);
-    // console.log('離開所有room...', nowRoom);
-    // console.log('user disconnected');
+    socket.emit('get article', getArticleFromMap(roomId));
+    //broadcast給所有玩家修改遊戲狀態(state)
+    io.to(roomId).emit('run state');
   });
+
+  //結束遊戲
+  socket.on('finish game', (roomId) => {
+    console.log('finish game!!');
+    changeFinishStateToMap(roomId);
+    io.to(roomId).emit('finish state');
+  });
+
+  //儲存文章
+  socket.on('save article', ({ roomId, words }) => {
+    console.log('文章', words);
+    saveArticleToMap(roomId, words);
+  });
+
+  socket.on('update article', (roomId) => {
+    io.to(roomId).emit('get article');
+  });
+
+  // 當使用者斷線，要做leave room 動作
+  // socket.on('disconnect', function () {
+  //   findAllRoomsInMap;
+  //   let nowRoom = findRooms(socket);
+  //   console.log('目前所有room...', nowRoom);
+  //   //從roomSet中移除該room
+
+  //   nowRoom.forEach((room) => {
+  //     console.log(room);
+  //   });
+  //   // socket.leave(nowRoom);
+  //   // nowRoom = findRooms(socket);
+  //   // console.log('離開所有room...', nowRoom);
+  //   // console.log('user disconnected');
+  // });
 });
 
 app.use(function (err, req, res, next) {

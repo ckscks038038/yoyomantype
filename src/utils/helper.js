@@ -37,3 +37,19 @@ export const checkRoomId = (roomId) => {
   };
   fetchData();
 };
+
+export const WordsContainer = ({ children }) => {
+  return (
+    <div className="relative mt-3 max-w-7xl break-words text-3xl leading-relaxed">
+      {children}
+    </div>
+  );
+};
+
+export const GeneratedWords = ({ words }) => {
+  return <div className=" text-slate-500">{words}</div>;
+};
+
+export const CountdownTimer = ({ timeLeft }) => {
+  return <h2 className="font-medium text-primary-400">Time: {timeLeft}</h2>;
+};
