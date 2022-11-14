@@ -84,7 +84,7 @@ io.on('connection', (socket) => {
     //***重製所有人打字進度***//
     //先得到所有玩家的id
     const users = getUsersProgressInMap(roomId);
-    const arrOfUserId = Object.keys(users);
+    const arrOfUserId = Object.keys(users.users);
 
     //更新typed=0
     arrOfUserId.forEach((userId) => {
@@ -108,7 +108,6 @@ io.on('connection', (socket) => {
   //取得所有房客的名字、狀態
   socket.on('get users progress', (roomId) => {
     const usersProgress = getUsersProgressInMap(roomId);
-    console.log('user資料', usersProgress);
     io.to(roomId).emit('send users progress', usersProgress);
   });
 

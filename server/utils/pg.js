@@ -11,10 +11,10 @@ const pool = new Pool({
 pool
   .connect()
   .then(() => {
-    console.log('connected successfully');
+    console.log('Database connected successfully');
   })
   .catch(() => {
-    console.log('connection fail');
+    console.log('Database connection fail');
   });
 
 module.exports = pool;

@@ -89,7 +89,7 @@ const getUsersProgressInMap = (roomId) => {
 
 //更新房間玩家狀態
 const updateUsersProgressToMap = (roomId, userId, totalTyped) => {
-  // console.log('更新玩家打字進度：玩家：', userId, '進度：', totalTyped);
+  // console.log('檢查', roomId, userId, totalTyped);
   rooms[roomId].users[userId].typed = totalTyped;
   // console.log('玩家進度：', rooms[roomId].users[userId].typed);
 };
