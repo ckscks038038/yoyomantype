@@ -18,9 +18,8 @@ const createNewRoomToMap = ({ roomId, ownerId }) => {
 
   //儲存房主ID, 動物名稱
   rooms[roomId] = { users: {}, article: '', gameState: '' };
-  rooms[roomId].users[ownerId] = randomName;
+  rooms[roomId].users[ownerId] = { name: randomName, typed: 0 };
   rooms[roomId].gameState = 'start';
-  console.log(`room ${roomId} is created by ${ownerId}.`);
 };
 
 //儲存文章(房主)
@@ -38,8 +37,8 @@ const JoinRoomToMap = ({ roomId, userId }) => {
   const randomName = uniqueNamesGenerator({
     dictionaries: [colors, animals],
   });
-  rooms[roomId].users[userId] = randomName;
-  console.log('所有使用者狀態', rooms[roomId].gameState);
+  rooms[roomId].users[userId] = { name: randomName, typed: 0 };
+  console.log('(server)所有房間的人：', rooms[roomId].users);
 };
 
 //**********************進入Game Page **************************/
@@ -57,13 +56,43 @@ const changeFinishStateToMap = (roomId) => {
 //******************** 離開房間、確認房間狀態 ***********************/
 
 //離開房間
-const removeDisroomsFromMap = (roomId, userId) => {};
+const removeUserFromRoomInMap = (roomId, userId) => {
+  console.log('roomId', roomId, userId);
+  console.log('到底', rooms[roomId]);
+
+  delete rooms[roomId].users[userId];
+  console.log('確認是否移除使用者', rooms[roomId].users);
+};
+
+const findUserInRoomInMap = (userId) => {
+  const arrOfRooms = findAllRoomsInMap();
+  let theRoom = '';
+  arrOfRooms.forEach((room) => {
+    if (rooms[room].users.hasOwnProperty(userId)) {
+      theRoom = room;
+    }
+  });
+  return theRoom === '' ? null : theRoom;
+};
 
 //檢查房間存在
 const checkRoomIdExistInMap = (roomId) => {
   return rooms.hasOwnProperty(roomId);
 };
 
+//取得房間所有人狀態(name, typed)
+const getUsersProgressInMap = (roomId) => {
+  if (rooms[roomId]) {
+    return rooms[roomId];
+  }
+};
+
+//更新房間玩家狀態
+const updateUsersProgressToMap = (roomId, userId, totalTyped) => {
+  // console.log('更新玩家打字進度：玩家：', userId, '進度：', totalTyped);
+  rooms[roomId].users[userId].typed = totalTyped;
+  // console.log('玩家進度：', rooms[roomId].users[userId].typed);
+};
 //檢查房間狀態
 const checkRoomStateInMap = (roomId) => {
   return rooms[roomId].gameState === 'run';
@@ -77,12 +106,14 @@ const findAllRoomsInMap = () => {
 
 module.exports = {
   JoinRoomToMap,
-  removeDisroomsFromMap,
+  removeUserFromRoomInMap,
   createNewRoomToMap,
   checkRoomIdExistInMap,
-  findAllRoomsInMap,
   saveArticleToMap,
   getArticleFromMap,
   changeStartStateToMap,
   changeFinishStateToMap,
+  getUsersProgressInMap,
+  updateUsersProgressToMap,
+  findUserInRoomInMap,
 };
