@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { TiChevronRight } from 'react-icons/ti';
 import { useNavigate } from 'react-router-dom';
 import webSocket from 'socket.io-client';
+import { BsPeople } from 'react-icons/bs';
+
 const { v4: uuidv4 } = require('uuid');
 const io = webSocket('http://localhost:3300');
 
@@ -45,30 +47,36 @@ const MultiplayerPage = () => {
   };
 
   return (
-    <WordsContainer>
-      <input
-        type="button"
-        className="rounded-md border-2 bg-slate-100 px-2"
-        value="create room"
-        onClick={createRoom}
-      />
-
-      <div className="flex space-x-1">
+    <>
+      <BsPeople className="mb-10 h-60 w-60  text-gray-100"></BsPeople>
+      <h1 className="mb-10 text-6xl font-black text-gray-100	">
+        Mulitplayer MODE
+      </h1>
+      <WordsContainer>
         <input
-          placeholder="enter room code"
-          className="w-48 rounded-md bg-slate-400 pl-3 placeholder-gray-500"
-          value={inputValue}
-          onChange={(event) => {
-            setinputValue(event.target.value);
-          }}
-        />
-        <TiChevronRight
           type="button"
-          onClick={checkRoom}
-          className="h-6 w-6 rounded-md border-2 border-gray-800"
+          className="rounded-md border-2 bg-slate-100 px-2"
+          value="create room"
+          onClick={createRoom}
         />
-      </div>
-    </WordsContainer>
+
+        <div className="flex space-x-1">
+          <input
+            placeholder="enter room code"
+            className="w-48 rounded-md bg-slate-400 pl-3 placeholder-gray-500"
+            value={inputValue}
+            onChange={(event) => {
+              setinputValue(event.target.value);
+            }}
+          />
+          <TiChevronRight
+            type="button"
+            onClick={checkRoom}
+            className="h-6 w-6 rounded-md border-2 border-gray-800"
+          />
+        </div>
+      </WordsContainer>
+    </>
   );
 };
 

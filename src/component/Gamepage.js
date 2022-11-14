@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import useMultiEngine from '../hooks/useMultiEngine';
-
 import { GeneratedWords, WordsContainer } from '../utils/helper';
 import UserTypings from './UserTypings';
 import MultiPlayerStartButton from './MultiPlayerStartButton';
@@ -48,6 +47,7 @@ const Gamepage = () => {
           return {
             name: usersProgress.users[id].name,
             typed: usersProgress.users[id].typed,
+            id: id,
           };
         });
         setUsers(arrOfUsersProgress);
@@ -104,23 +104,38 @@ const Gamepage = () => {
 
   return (
     <>
-      <h2>Total length: {words.length}</h2>
-      <div>
+      <div className="text-xl font-bold text-amber-50">Room Code: {id}</div>
+      <div className="text-gray-300">You are: {identity}</div>
+      <h2 className="text-gray-300">Total length: {words.length}</h2>
+      <div className="font-bold text-gray-300">GAME STATE:{state}</div>
+      <div className="mt-6">
         {users.map((user) => {
-          return (
-            <div key={`${user.name}_${user.typed}`}>
-              <h2>name: {user.name}</h2>
-              <h2>typed: {user.typed}</h2>
-
-              <hr />
-            </div>
-          );
+          if (io.id === user.id) {
+            return (
+              <div
+                className="text-xl	font-black	 text-violet-200"
+                key={`${user.name}_${user.typed}`}>
+                <h2> {user.name}(you)</h2>
+                <ProgressBar
+                  progressPercentage={(user.typed / words.length) * 100}
+                />
+              </div>
+            );
+          } else {
+            return (
+              <div
+                className=" text-xl font-black	text-zinc-400"
+                key={`${user.name}_${user.typed} `}>
+                <h2> {user.name}</h2>
+                {/* <h2>typed: {user.typed}</h2> */}
+                <ProgressBar
+                  progressPercentage={(user.typed / words.length) * 100}
+                />
+              </div>
+            );
+          }
         })}
       </div>
-      <div>{identity}</div>
-      <div>{totalTyped}</div>
-      <div>Gamepage {id}</div>
-      <div>{state}</div>
       <WordsContainer>
         <GeneratedWords words={words} />
         <UserTypings
@@ -149,6 +164,18 @@ const Gamepage = () => {
         ) : null
       }
     </>
+  );
+};
+
+const ProgressBar = ({ progressPercentage }) => {
+  return (
+    <div className="h-2 w-6/12 rounded-2xl	 bg-gray-300">
+      <div
+        style={{ width: `${progressPercentage}%` }}
+        className={`h-full ${
+          progressPercentage < 70 ? 'bg-red-600' : 'bg-green-600'
+        }`}></div>
+    </div>
   );
 };
 
