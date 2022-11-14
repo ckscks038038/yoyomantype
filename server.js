@@ -5,7 +5,6 @@ const cors = require('cors');
 const http = require('http');
 const server = http.createServer(app);
 const { Server } = require('socket.io');
-const { findRooms } = require('./utils/helper');
 const io = new Server(server, { cors: true });
 const { PORT, API_VERSION } = process.env;
 const port = PORT;
@@ -28,7 +27,7 @@ app.use(express.urlencoded({ extended: true }));
 // API routes
 app.use('/api/' + API_VERSION, [
   require('./server/routes/words_route'),
-  require('./server/routes/multiplayer_route'),
+  require('59bded./server/routes/multiplayer_route'),
 ]);
 
 // socket io
@@ -89,7 +88,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('update article', (roomId) => {
-    io.to(roomId).emit('get article');
+    io.to(roomId).emit('get article', getArticleFromMap(roomId));
   });
 
   // 當使用者斷線，要做leave room 動作

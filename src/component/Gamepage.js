@@ -61,7 +61,7 @@ const Gamepage = () => {
   const initGuestSocket = () => {
     io.emit('join room', roomId);
     io.on('get article', (article) => {
-      console.log('重新取得文章');
+      console.log('重新取得文章', article);
       setWords(article);
     });
   };
@@ -72,6 +72,15 @@ const Gamepage = () => {
       io.emit('finish game', roomId);
     }
   }, [totalTyped]);
+
+  //在updateWords以後再來儲存articles
+  useEffect(() => {
+    //如果是owner的話
+    if (identity === 'owner') {
+      io.emit('save article', { roomId, words });
+      io.emit('update article', roomId);
+    }
+  }, [words]);
 
   return (
     <>
@@ -101,8 +110,7 @@ const Gamepage = () => {
                 : () => {
                     console.log('重開始');
                     updateWords();
-                    io.emit('save article', { roomId, words });
-                    io.emit('update article', roomId);
+
                     io.emit('start game', roomId);
                   }
             }
