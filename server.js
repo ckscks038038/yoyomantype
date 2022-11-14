@@ -124,19 +124,19 @@ io.on('connection', (socket) => {
   });
 
   // 當使用者斷線，要做leave room 動作
-  // socket.on('disconnect', () => {
-  //   //找到使用者在哪一間rooms
-  //   const roomId = findUserInRoomInMap(socket.id);
+  socket.on('disconnect', () => {
+    //找到使用者在哪一間rooms
+    const roomId = findUserInRoomInMap(socket.id);
 
-  //   //將使用者從roomMap紀錄移除
-  //   if (roomId) {
-  //     removeUserFromRoomInMap(roomId, socket.id);
-  //   }
+    //將使用者從roomMap紀錄移除
+    if (roomId) {
+      removeUserFromRoomInMap(roomId, socket.id);
+    }
 
-  //   //通知前端更新畫面
-  //   const usersProgress = getUsersProgressInMap(roomId);
-  //   io.to(roomId).emit('send users progress', usersProgress);
-  // });
+    //通知前端更新畫面
+    const usersProgress = getUsersProgressInMap(roomId);
+    io.to(roomId).emit('send users progress', usersProgress);
+  });
 });
 
 app.use(function (err, req, res, next) {
