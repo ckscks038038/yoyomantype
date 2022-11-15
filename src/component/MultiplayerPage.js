@@ -7,8 +7,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 const notify = () => toast('Wow so easy!');
 const { v4: uuidv4 } = require('uuid');
-const io = webSocket('http://localhost:3300');
-
+// const io = webSocket('http://localhost:3300');
+const io = webSocket('http://3.113.125.224/socket');
 const MultiplayerPage = () => {
   const [inputValue, setinputValue] = useState('');
   const navigate = useNavigate();
