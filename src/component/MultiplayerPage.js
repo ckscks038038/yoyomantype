@@ -3,7 +3,9 @@ import { TiChevronRight } from 'react-icons/ti';
 import { useNavigate } from 'react-router-dom';
 import webSocket from 'socket.io-client';
 import { BsPeople } from 'react-icons/bs';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+const notify = () => toast('Wow so easy!');
 const { v4: uuidv4 } = require('uuid');
 const io = webSocket('http://localhost:3300');
 
@@ -39,6 +41,16 @@ const MultiplayerPage = () => {
           state: { identity: 'guest', roomId: roomId },
         });
       } else {
+        toast.error('🦄 Room Code does not exist!', {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'dark',
+        });
         console.log('room does not exist');
       }
     });
@@ -50,7 +62,7 @@ const MultiplayerPage = () => {
     <>
       <BsPeople className="mb-10 h-60 w-60  text-gray-100"></BsPeople>
       <h1 className="mb-10 text-6xl font-black text-gray-100	">
-        Mulitplayer MODE
+        Multiplayer MODE
       </h1>
       <WordsContainer>
         <input
@@ -72,10 +84,22 @@ const MultiplayerPage = () => {
           <TiChevronRight
             type="button"
             onClick={checkRoom}
-            className="h-6 w-6 rounded-md border-2 border-gray-800"
+            className="h-6 w-6 rounded-md border-2 border-gray-800 text-slate-400"
           />
         </div>
       </WordsContainer>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
     </>
   );
 };

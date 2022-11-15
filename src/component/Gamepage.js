@@ -136,20 +136,25 @@ const Gamepage = () => {
           }
         })}
       </div>
-      <WordsContainer>
-        <GeneratedWords words={words} />
-        <UserTypings
-          className="absolute inset-0"
-          userInput={typed}
-          words={words}
-          state={state}
-        />
-      </WordsContainer>
+      {state !== 'finish' ? (
+        <WordsContainer>
+          <GeneratedWords words={words} />
+          <UserTypings
+            className="absolute inset-0"
+            userInput={typed}
+            words={words}
+            state={state}
+          />
+        </WordsContainer>
+      ) : (
+        <div className="mt-20 text-xl text-slate-200 ">Next Run Let's Go</div>
+      )}
 
       {
         //只有房主擁有開始遊戲權力
         identity === 'owner' && (state === 'start' || state === 'finish') ? (
           <MultiPlayerStartButton
+            className="mt-5 text-slate-500"
             handleStart={
               state === 'start'
                 ? () => {
