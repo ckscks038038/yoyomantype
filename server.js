@@ -30,7 +30,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/' + API_VERSION, [
   require('./server/routes/words_route'),
   require('./server/routes/multiplayer_route'),
-  // require('./server/routes/user_route'),
+  require('./server/routes/user_route'),
 ]);
 
 // socket io
