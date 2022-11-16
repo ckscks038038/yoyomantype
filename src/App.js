@@ -17,6 +17,7 @@ function App() {
       </nav>
       <Routes>
         <Route path="/" element={<Homepage />} />
+        <Route path="/test" element={<h1>註冊登入</h1>} />
         <Route path="/multiplayer" element={<MultiplayerPage />} />
         <Route path="/multiplayer/:id" element={<Gamepage />} />
       </Routes>
