@@ -143,6 +143,6 @@ app.use(function (err, req, res, next) {
   res.status(500).send('Internal Server Error');
 });
 
-server.listen(3000, () =>
+server.listen(port, () =>
   console.log(`Example app listening at http://localhost:${port}`)
 );
