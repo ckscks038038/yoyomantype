@@ -56,67 +56,47 @@ const signUp = async (name, email, password) => {
 };
 
 const nativeSignIn = async (email, password) => {
-  const conn = await pool.getConnection();
+  const conn = await pool.connect();
   try {
-    await conn.query('START TRANSACTION');
+    const sql = `SELECT * FROM accounts WHERE email = $1`;
+    const users = await conn.query(sql, [email]);
+    const user = users.rows;
 
-    const [users] = await conn.query('SELECT * FROM user WHERE email = ?', [
-      email,
-    ]);
-    const user = users[0];
-
-    if (!bcrypt.compareSync(password, user.password)) {
+    if (!bcrypt.compareSync(password, user[0].password)) {
       await conn.query('COMMIT');
       return { error: 'wrong password', status: 401 };
     }
 
-    const loginAt = new Date();
     const accessToken = jwt.sign(
       {
-        provider: user.provider,
         name: user.name,
         email: user.email,
-        picture: user.picture,
       },
       TOKEN_SECRET
     );
 
-    const queryStr =
-      'UPDATE user SET access_token = ?, access_expired = ?, login_at = ? WHERE id = ?';
-    await conn.query(queryStr, [accessToken, TOKEN_EXPIRE, loginAt, user.id]);
-
-    await conn.query('COMMIT');
-
     user.access_token = accessToken;
-    user.login_at = loginAt;
     user.access_expired = TOKEN_EXPIRE;
 
     return { user };
   } catch (error) {
-    await conn.query('ROLLBACK');
+    console.log(error);
     return {
       error: 'the email does not exist, please register first',
       status: 402,
     };
   } finally {
-    await conn.release();
+    conn.release();
   }
 };
 
-const getUserDetail = async (email, roleId) => {
+const getUserDetail = async (email) => {
   try {
-    if (roleId) {
-      const [users] = await pool.query(
-        'SELECT * FROM user WHERE email = ? AND role_id = ?',
-        [email, roleId]
-      );
-      return users[0];
-    } else {
-      const [users] = await pool.query('SELECT * FROM user WHERE email = ?', [
-        email,
-      ]);
-      return users[0];
-    }
+    const users = await pool.query('SELECT * FROM accounts WHERE email = $1', [
+      email,
+    ]);
+
+    return users.rows;
   } catch (e) {
     return null;
   }
