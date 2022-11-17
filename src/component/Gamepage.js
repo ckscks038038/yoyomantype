@@ -6,7 +6,7 @@ import UserTypings from './UserTypings';
 import MultiPlayerStartButton from './MultiPlayerStartButton';
 import webSocket from 'socket.io-client';
 // const io = webSocket('http://localhost:3300');
-const io = webSocket();
+const io = webSocket('http://localhost:3300');
 const Gamepage = () => {
   const { id } = useParams();
   let location = useLocation();
