@@ -5,7 +5,7 @@ import useTypings from './useTypings';
 import { countErrors } from '../utils/helper';
 
 const NUMBER_OF_WORDS = 30;
-const COUNTDOWN_SECONDS = 3;
+const COUNTDOWN_SECONDS = 15;
 
 const useEngine = () => {
   const [state, setState] = useState('start');
@@ -72,6 +72,7 @@ const useEngine = () => {
     timeLeft,
     totalTyped,
     replay,
+    COUNTDOWN_SECONDS,
   };
 };
 

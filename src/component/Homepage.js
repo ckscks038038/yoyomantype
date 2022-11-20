@@ -3,16 +3,27 @@ import RestartButton from './RestartButton';
 import Results from './Results';
 import UserTypings from './UserTypings';
 import useEngine from '../hooks/useEngine';
+import LineChart from './LineChart';
 import {
   calculateAccuracyPercentage,
   WordsContainer,
   GeneratedWords,
   CountdownTimer,
 } from '../utils/helper';
+import Line from '../line';
 
 function Homepage() {
-  const { state, words, timeLeft, typed, errors, restart, totalTyped, replay } =
-    useEngine();
+  const {
+    state,
+    words,
+    timeLeft,
+    typed,
+    errors,
+    restart,
+    totalTyped,
+    replay,
+    COUNTDOWN_SECONDS,
+  } = useEngine();
 
   return (
     <>
@@ -31,16 +42,11 @@ function Homepage() {
         </div>
       ) : (
         <div>
+          <div className="text-transparent">
+            1321232132321323213232132321323213232132321323213232132321323213232132321323213232132321323213232132321323213232132321323213
+          </div>
           <div>
-            {replay.map((char) => {
-              return (
-                <div
-                  className="text-xl	font-black	 text-violet-200"
-                  key={`${char.word}_${char.time}`}>
-                  <h2> {char.time % 100000}</h2>
-                </div>
-              );
-            })}
+            <Line data={replay} timeLength={COUNTDOWN_SECONDS} />
           </div>
           <Results
             state={state}

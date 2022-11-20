@@ -47,8 +47,6 @@ const useTypings = (enabled) => {
 
   //重設replay儲存、打字紀錄、cursor位置
   const clearTyped = useCallback(() => {
-    //檢查replay現在存放什麼
-    console.log('replay', replay);
     setTyped('');
     setCursor(0);
     setReplay('');

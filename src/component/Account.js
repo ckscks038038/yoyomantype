@@ -112,7 +112,7 @@ const Account = () => {
   if (!localStorage.getItem('jwtToken')) {
     return (
       <>
-        <div className="flex justify-between gap-20">
+        <div className="flex justify-between gap-20 text-slate-400">
           <form
             className="register flex flex-col "
             onSubmit={(e) => {
