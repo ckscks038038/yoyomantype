@@ -5,7 +5,6 @@ import webSocket from 'socket.io-client';
 import { BsPeople } from 'react-icons/bs';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-const notify = () => toast('Wow so easy!');
 const { v4: uuidv4 } = require('uuid');
 const io = webSocket('http://localhost:3000');
 // const io = webSocket();
@@ -43,13 +42,14 @@ const MultiplayerPage = () => {
       } else {
         toast.error('🦄 Room Code does not exist!', {
           position: 'top-right',
-          autoClose: 5000,
+          autoClose: 1000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
           theme: 'dark',
+          toastId: "Room doesn't exist.",
         });
         console.log('room does not exist');
       }

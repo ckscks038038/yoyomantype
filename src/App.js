@@ -7,6 +7,8 @@ import KeyboardButton from './component/KeyboardButton';
 import Gamepage from './component/Gamepage';
 import Account from './component/Account';
 import AccountButton from './component/AccountButton';
+import Profile from './component/Profile';
+import LogOutButton from './component/LogoutButton';
 function App() {
   return (
     <>
@@ -20,6 +22,9 @@ function App() {
         <Link to="/account">
           <AccountButton className={'mx-auto mt-10 text-slate-500'} />
         </Link>
+        <Link className="absolute top-0 right-5 h-16 w-16">
+          <LogOutButton className={'mx-auto mt-10 text-slate-500'} />
+        </Link>
       </nav>
       <Routes>
         <Route path="/" element={<Homepage />} />
@@ -27,6 +32,7 @@ function App() {
         <Route path="/multiplayer" element={<MultiplayerPage />} />
         <Route path="/multiplayer/:id" element={<Gamepage />} />
         <Route path="/account" element={<Account />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </>
   );

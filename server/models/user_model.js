@@ -24,23 +24,22 @@ const signUp = async (name, email, password) => {
       password: bcrypt.hashSync(password, salt),
       name: name,
     };
-    const accessToken = jwt.sign(
-      {
-        name: user.name,
-        email: user.email,
-      },
-      TOKEN_SECRET
-    );
 
     const queryStr =
-      'INSERT INTO accounts (name, password, email,created_on, last_login) values ($1,$2,$3,current_timestamp,current_timestamp)';
+      'INSERT INTO accounts (name, password, email,created_on, last_login) values ($1,$2,$3,current_timestamp,current_timestamp) RETURNING id';
     const result = await conn.query(queryStr, [
       name,
       bcrypt.hashSync(password, salt),
       email,
     ]);
 
-    user.id = result.insertId;
+    // signUp後的 user_id
+    user.id = result.rows[0].id;
+
+    const accessToken = jwt.sign(
+      { id: user.id, name: user.name, email: user.email },
+      TOKEN_SECRET
+    );
     user.access_token = accessToken;
 
     return { user };
@@ -68,10 +67,7 @@ const nativeSignIn = async (email, password) => {
     }
 
     const accessToken = jwt.sign(
-      {
-        name: user.name,
-        email: user.email,
-      },
+      { id: [0].id, name: user[0].name, email: user[0].email },
       TOKEN_SECRET
     );
 
@@ -95,15 +91,26 @@ const getUserDetail = async (email) => {
     const users = await pool.query('SELECT * FROM accounts WHERE email = $1', [
       email,
     ]);
-
     return users.rows;
   } catch (e) {
     return null;
   }
 };
 
+const getUserTyingData = async (id) => {
+  //typingData: 由物件{acc, cpm, accounts_id}組成的陣列
+  const typingData = await pool.query(
+    'SELECT acc, cpm, date FROM history_time where accounts_id = $1',
+    [id]
+  );
+  // console.log('typingData', typingData.rows);
+
+  return typingData.rows;
+};
+
 module.exports = {
   signUp,
   nativeSignIn,
   getUserDetail,
+  getUserTyingData,
 };

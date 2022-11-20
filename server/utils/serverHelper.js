@@ -33,7 +33,6 @@ const authentication = () => {
       req.user = user;
       let [userDetail] = await User.getUserDetail(user.email);
 
-      console.log('userDetail', userDetail);
       if (!userDetail) {
         res.status(403).send({ error: 'Forbidden' });
       } else {

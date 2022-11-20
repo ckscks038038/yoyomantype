@@ -93,16 +93,29 @@ const signIn = async (req, res) => {
 };
 
 const getUserProfile = async (req, res) => {
-  const data = req.body;
-
-  await User.getUserDetail(data.email, data.password);
-
+  const arrOfTyingData = await User.getUserTyingData(req.user.id);
+  const initialValue = 0;
+  const sumOfAcc = arrOfTyingData.reduce(
+    (accumulator, currentValue) => accumulator + currentValue.acc,
+    initialValue
+  );
+  const sumOfCpm = arrOfTyingData.reduce(
+    (accumulator, currentValue) => accumulator + currentValue.cpm,
+    initialValue
+  );
+  const averageAcc = sumOfAcc / arrOfTyingData.length;
+  const averageCpm = sumOfCpm / arrOfTyingData.length;
   res.status(200).send({
     data: {
+      id: req.user.id,
       name: req.user.name,
       email: req.user.email,
       created_on: req.user.created_on,
       last_login: req.user.last_login,
+      totalTest: arrOfTyingData.length,
+      acc: averageAcc,
+      cpm: averageCpm,
+      typingData: arrOfTyingData,
     },
   });
 
