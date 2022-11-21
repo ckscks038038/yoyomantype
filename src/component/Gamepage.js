@@ -26,9 +26,10 @@ const Gamepage = () => {
     resetTotalTyped,
     totalTyped,
     replay,
+    keydownHandler,
   } = useMultiEngine();
   const [users, setUsers] = useState([]);
-
+  const [winner, setWinner] = useState('');
   useEffect(() => {
     if (io) {
       if (identity === 'owner') {
@@ -64,6 +65,15 @@ const Gamepage = () => {
         clearTyped();
         resetTotalTyped();
       });
+
+      //渲染贏家為何
+      io.on('winner', ({ winnerName, winnerId }) => {
+        setWinner(winnerName);
+        if (io.id === winnerId) {
+          console.log('you win');
+          setWinner('YOU!');
+        }
+      });
     }
   }, [io]);
 
@@ -89,7 +99,7 @@ const Gamepage = () => {
   // 有人完成就改變狀態成finished
   useEffect(() => {
     if (totalTyped === words.length) {
-      io.emit('finish game', roomId);
+      io.emit('finish game', { roomId: roomId, id: io.id });
     }
   }, [totalTyped]);
 
@@ -102,6 +112,14 @@ const Gamepage = () => {
     }
   }, [words]);
 
+  // attach the keydown event listener to record keystrokes
+  useEffect(() => {
+    window.addEventListener('keydown', keydownHandler);
+    // Remove event listeners on cleandup
+    return () => {
+      window.removeEventListener('keydown', keydownHandler);
+    };
+  }, [keydownHandler]);
   return (
     <>
       <div className="mt-80 text-xl font-bold text-amber-50">
@@ -149,7 +167,7 @@ const Gamepage = () => {
           />
         </WordsContainer>
       ) : (
-        <div className="mt-20 text-xl text-slate-200 ">Next Run Let's Go</div>
+        <div className="mt-20 text-xl text-slate-200 ">{`winner is ${winner}`}</div>
       )}
 
       {

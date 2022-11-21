@@ -37,7 +37,7 @@ app.use('/api/' + API_VERSION, [
 io.on('connection', (socket) => {
   //創建新房間
   socket.on('create room', (roomId) => {
-    createNewRoomToMap({ roomId: roomId, ownerId: socket.id });
+    createNewRoomToMap({ roomId: roomId, ownerId: socket.id, socket: socket });
     socket.join(roomId);
   });
 
@@ -56,7 +56,7 @@ io.on('connection', (socket) => {
   socket.on('join room', (roomId) => {
     if (checkRoomIdExistInMap(roomId)) {
       socket.join(roomId);
-      JoinRoomToMap({ roomId: roomId, userId: socket.id });
+      JoinRoomToMap({ roomId: roomId, userId: socket.id, socket: socket });
 
       //回傳文章給guest
       socket.emit('get article', getArticleFromMap(roomId));
@@ -76,11 +76,15 @@ io.on('connection', (socket) => {
   });
 
   //結束遊戲
-  socket.on('finish game', (roomId) => {
+  socket.on('finish game', ({ roomId }) => {
     //修改遊戲狀態=> finished
     changeFinishStateToMap(roomId);
     io.to(roomId).emit('finish state');
-
+    io.to(roomId).emit('winner', {
+      winnerName: socket.name,
+      winnerId: socket.id,
+    });
+    console.log('id.name', socket.name);
     //***重製所有人打字進度***//
     //先得到所有玩家的id
     const users = getUsersProgressInMap(roomId);

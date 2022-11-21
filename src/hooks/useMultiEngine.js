@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import useWords from './useWords';
 import useCountdownTimer from './useCountdownTimer';
-import useTypings from './useTypings';
+import useMultiTypings from './useMultiTyping';
 import { countErrors } from '../utils/helper';
 
 const NUMBER_OF_WORDS = 10;
@@ -12,12 +12,20 @@ const useMultiEngine = () => {
   const { words, updateWords, setWords } = useWords(NUMBER_OF_WORDS);
   const { timeLeft, startCountdown, resetCountdown } =
     useCountdownTimer(COUNTDOWN_SECONDS);
-  const { typed, cursor, clearTyped, resetTotalTyped, totalTyped, replay } =
-    useTypings(state !== 'finish');
+  const {
+    typed,
+    cursor,
+    clearTyped,
+    resetTotalTyped,
+    totalTyped,
+    replay,
+    keydownHandler,
+  } = useMultiTypings(state !== 'finish', words);
 
   const [errors, setErrors] = useState(0);
 
   const isStarting = state === 'start' && cursor > 0;
+
   const areWordsFinished = cursor === words.length;
 
   const restart = useCallback(() => {
@@ -72,6 +80,7 @@ const useMultiEngine = () => {
     totalTyped,
     replay,
     setState,
+    keydownHandler,
   };
 };
 

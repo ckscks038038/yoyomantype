@@ -10,12 +10,12 @@ const rooms = {};
 //**********************Mulitplayer Page ***********************/
 
 //創建房間(房主)
-const createNewRoomToMap = ({ roomId, ownerId }) => {
+const createNewRoomToMap = ({ roomId, ownerId, socket }) => {
   //給使用者隨機的動物名字
   const randomName = uniqueNamesGenerator({
     dictionaries: [colors, animals],
   });
-
+  socket.name = randomName;
   //儲存房主ID, 動物名稱
   rooms[roomId] = { users: {}, article: '', gameState: '' };
   rooms[roomId].users[ownerId] = { name: randomName, typed: 0 };
@@ -33,10 +33,11 @@ const getArticleFromMap = (roomId) => {
 };
 
 //加入房間(房客)
-const JoinRoomToMap = ({ roomId, userId }) => {
+const JoinRoomToMap = ({ roomId, userId, socket }) => {
   const randomName = uniqueNamesGenerator({
     dictionaries: [colors, animals],
   });
+  socket.name = randomName;
   rooms[roomId].users[userId] = { name: randomName, typed: 0 };
   console.log('(server)所有房間的人：', rooms[roomId].users);
 };

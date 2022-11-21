@@ -35,7 +35,7 @@ const Line = ({ data, timeLength }) => {
     if (endTime === timeLength && arrStartFromZeroData.length) {
       y += arrStartFromZeroData.length;
     }
-    finalLineChartData.push({ x: endTime, y: y });
+    finalLineChartData.push({ x: endTime, y: y * 60 });
   }
   const lineChartObj = [
     {
