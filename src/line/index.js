@@ -17,15 +17,15 @@ const Line = ({ data, timeLength }) => {
 
   let endTime = 0;
   let timeStamp = 0;
-  while (arrStartFromZeroData.length && endTime <= timeLength) {
+  while (arrStartFromZeroData.length || endTime <= timeLength) {
     endTime += 1;
     let y = 0;
-
+    timeStamp = arrStartFromZeroData.shift();
     while (timeStamp < endTime) {
       //時間區段內總數增加1
       //換下一個物件
-      timeStamp = arrStartFromZeroData.shift();
       y += 1;
+      timeStamp = arrStartFromZeroData.shift();
     }
     // 超過時間區段
     // 1.push上一個時間區段的結果到array (y值單位從秒到分鐘,要*60)
