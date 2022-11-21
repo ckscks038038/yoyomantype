@@ -3,7 +3,6 @@ import RestartButton from './RestartButton';
 import Results from './Results';
 import UserTypings from './UserTypings';
 import useEngine from '../hooks/useEngine';
-import LineChart from './LineChart';
 import {
   calculateAccuracyPercentage,
   WordsContainer,

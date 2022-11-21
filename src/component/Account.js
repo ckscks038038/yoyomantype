@@ -6,6 +6,7 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
+
 const Account = () => {
   const navigate = useNavigate();
   useEffect(() => {
@@ -18,7 +19,7 @@ const Account = () => {
       console.log('不可以render');
     }
   }, []);
-  const SignupUrl = 'http://localhost:3000/api/1.0/user/signup';
+  const SignupUrl = `http://localhost:3000/api/1.0/user/signup`;
   const SigninUrl = 'http://localhost:3000/api/1.0/user/signin';
 
   // SignUp, SignIn data
