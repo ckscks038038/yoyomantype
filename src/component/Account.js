@@ -113,7 +113,7 @@ const Account = () => {
   if (!localStorage.getItem('jwtToken')) {
     return (
       <>
-        <div className="flex justify-between gap-20 text-slate-400">
+        <div className="mt-80 flex justify-between gap-20 text-slate-400">
           <form
             className="register flex flex-col "
             onSubmit={(e) => {
@@ -126,7 +126,7 @@ const Account = () => {
                   console.log('fail', val);
                 });
             }}>
-            register
+            <div className="font-bold text-primary-400">register</div>
             <input
               onChange={(e) => {
                 handleSignUpChange(e);
@@ -135,8 +135,8 @@ const Account = () => {
               value={signupData.name}
               type="text"
               name="username"
-              placeholder="name"
-              className="my-4"
+              placeholder=" name"
+              className="my-4  rounded-sm"
             />
             <input
               onChange={(e) => {
@@ -146,8 +146,8 @@ const Account = () => {
               value={signupData.email}
               type="text"
               name="email"
-              placeholder="email"
-              className="my-4"
+              placeholder=" email"
+              className="my-4 rounded-sm bg-primary-400"
             />
             <input
               onChange={(e) => {
@@ -157,13 +157,13 @@ const Account = () => {
               value={signupData.password}
               type="text"
               name="password"
-              placeholder="password"
-              className="my-4"
+              placeholder=" password"
+              className="my-4 rounded-sm"
             />
             <input type="submit" id="submit" />
           </form>
           <form
-            className="login flex flex-col"
+            className="login flex flex-col rounded-sm"
             onSubmit={(e) => {
               handleSignInSubmit(e)
                 .then((val) => {
@@ -174,7 +174,7 @@ const Account = () => {
                   console.log('fail', val);
                 });
             }}>
-            or login
+            <div className="font-bold text-primary-400">or login</div>
             <input
               onChange={(e) => {
                 handleSignInChange(e);
@@ -182,8 +182,8 @@ const Account = () => {
               id="email"
               type="text"
               name="email"
-              placeholder="email"
-              className="my-4"
+              placeholder=" email"
+              className="my-4 rounded-sm"
               value={signinData.email}
             />
             <input
@@ -193,8 +193,8 @@ const Account = () => {
               id="password"
               type="text"
               name="password"
-              placeholder="password"
-              className="my-4"
+              placeholder=" password"
+              className="my-4 rounded-sm"
               value={signinData.password}
             />
             <input type="submit" id="submit" />

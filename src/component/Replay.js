@@ -61,7 +61,7 @@ const Replay = ({ state, ans, replay }) => {
     return null;
   } else {
     return (
-      <div className={' inset-0 w-1/2 break-all'}>
+      <div className={'  w-1/2 break-all'}>
         {typedCharacters.map((char, index) => {
           return (
             <Character

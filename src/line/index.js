@@ -39,7 +39,7 @@ const Line = ({ data, timeLength }) => {
   }
   const lineChartObj = [
     {
-      id: 'us',
+      id: 'cpm',
       color: 'hsl(197, 70%, 50%)',
       data: finalLineChartData,
     },

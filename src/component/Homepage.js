@@ -27,7 +27,7 @@ function Homepage() {
   return (
     <>
       {state !== 'finish' ? (
-        <div>
+        <div className="mt-80">
           <CountdownTimer timeLeft={timeLeft} />
           <WordsContainer>
             <GeneratedWords words={words} />
@@ -40,23 +40,29 @@ function Homepage() {
           </WordsContainer>
         </div>
       ) : (
-        <div>
-          <div className="text-transparent">
-            1321232132321323213232132321323213232132321323213232132321323213232132321323213232132321323213232132321323213232132321323213
+        <div className="mt-72">
+          <div className="flex space-x-2">
+            <Results
+              state={state}
+              className="mt-10 mr-20  w-1/6"
+              errors={errors}
+              accuracyPercentage={calculateAccuracyPercentage(
+                errors,
+                totalTyped
+              )}
+              total={totalTyped}
+            />
+            <Line
+              data={replay}
+              timeLength={COUNTDOWN_SECONDS}
+              className="w-5/6"
+            />
           </div>
-          <div>
-            <Line data={replay} timeLength={COUNTDOWN_SECONDS} />
-          </div>
-          <Results
-            state={state}
-            className="mt-10"
-            errors={errors}
-            accuracyPercentage={calculateAccuracyPercentage(errors, totalTyped)}
-            total={totalTyped}
-          />
 
-          <div className=" text-slate-500">Replay</div>
-          <Replay className="mt-10" state={state} ans={words} replay={replay} />
+          <div className="ml-32">
+            <div className=" mt-20 text-slate-500">Replay</div>
+            <Replay state={state} ans={words} replay={replay} />
+          </div>
         </div>
       )}
       <RestartButton

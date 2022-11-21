@@ -3,6 +3,7 @@ import { TiChevronRight } from 'react-icons/ti';
 import { useNavigate } from 'react-router-dom';
 import webSocket from 'socket.io-client';
 import { BsPeople } from 'react-icons/bs';
+import { TiGroup } from 'react-icons/ti';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 const { v4: uuidv4 } = require('uuid');
@@ -60,14 +61,14 @@ const MultiplayerPage = () => {
 
   return (
     <>
-      <BsPeople className="mb-10 h-60 w-60  text-gray-100"></BsPeople>
-      <h1 className="mb-10 text-6xl font-black text-gray-100	">
-        Multiplayer MODE
+      <h1 className="mb-10 mt-72 text-6xl font-black	text-primary-400">
+        MULTIPLAYER MODE
       </h1>
-      <WordsContainer>
+      <TiGroup className=" mb-10 ml-36 h-60 w-60   text-primary-100" />
+      <div className="mb-14 flex justify-around">
         <input
           type="button"
-          className="rounded-md border-2 bg-slate-100 px-2"
+          className="rounded-md border-2 bg-slate-100 px-2 font-semibold"
           value="create room"
           onClick={createRoom}
         />
@@ -87,7 +88,7 @@ const MultiplayerPage = () => {
             className="h-6 w-6 rounded-md border-2 border-gray-800 text-slate-400"
           />
         </div>
-      </WordsContainer>
+      </div>
       <ToastContainer
         position="top-right"
         autoClose={5000}

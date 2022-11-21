@@ -4,7 +4,7 @@
 
 @layer base {
   body {
-    @apply grid min-h-0 place-items-center bg-slate-800 font-mono mt-1
+    @apply grid min-h-0 place-items-center bg-slate-800 font-mono mt-1 text-xl
 	tracking-wider px-4;
   }
 }

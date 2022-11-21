@@ -5,6 +5,47 @@ const LineChart = ({ data }) => {
   return (
     <ResponsiveLine
       data={data}
+      theme={{
+        textColor: '#94a3b8',
+        fontSize: 15,
+        axis: {
+          domain: {
+            line: {
+              stroke: '#777777',
+              strokeWidth: 1,
+            },
+          },
+          legend: {
+            text: {
+              fontSize: 15,
+              fill: '#94a3b8',
+            },
+          },
+          ticks: {
+            line: {
+              stroke: '#777777',
+              strokeWidth: 1,
+            },
+            text: {
+              fontSize: 13,
+              fill: '#94a3b8',
+            },
+          },
+        },
+
+        legends: {
+          title: {
+            text: {
+              fontSize: 15,
+              fill: '#94a3b8',
+            },
+          },
+          text: {
+            fontSize: 11,
+            fill: '#333333',
+          },
+        },
+      }}
       margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
       xScale={{ type: 'point' }}
       yScale={{
@@ -22,8 +63,8 @@ const LineChart = ({ data }) => {
         tickSize: 5,
         tickPadding: 5,
         tickRotation: 0,
-        legend: 'transportation',
-        legendOffset: 36,
+        legend: 'character per minute',
+        legendOffset: 44,
         legendPosition: 'middle',
       }}
       axisLeft={{
@@ -35,8 +76,11 @@ const LineChart = ({ data }) => {
         legendOffset: -40,
         legendPosition: 'middle',
       }}
+      enableGridX={false}
+      enableGridY={false}
+      enableArea={true}
       pointSize={10}
-      pointColor={{ theme: 'background' }}
+      pointColor={{ theme: 'grid.line.stroke' }}
       pointBorderWidth={2}
       pointBorderColor={{ from: 'serieColor' }}
       pointLabelYOffset={-12}
