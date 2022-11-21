@@ -34,9 +34,6 @@ const useMultiTypings = (enabled, words) => {
 
       switch (key) {
         case 'Backspace':
-          console.log('total', totalTyped.current);
-          console.log('refs', typedRef.current[totalTyped.current - 1]);
-          console.log('words', words[totalTyped.current - 1]);
           //刪到對的字要扣掉
           if (
             correctTyped.current > 0 &&
@@ -64,10 +61,10 @@ const useMultiTypings = (enabled, words) => {
           //打對字要增加
           if (key === words[totalTyped.current - 1]) {
             correctTyped.current += 1;
+            console.log('useTyings->correctedTyped');
           }
           typedRef.current += key;
       }
-      console.log(correctTyped.current);
     },
     [enabled]
   );
@@ -78,7 +75,6 @@ const useMultiTypings = (enabled, words) => {
     setCursor(0);
     setReplay('');
     typedRef.current = '';
-    correctTyped.current = 0;
   }, []);
 
   const resetTotalTyped = useCallback(() => {
@@ -93,6 +89,7 @@ const useMultiTypings = (enabled, words) => {
     totalTyped: totalTyped.current,
     replay,
     keydownHandler,
+    correctTyped,
   };
 };
 

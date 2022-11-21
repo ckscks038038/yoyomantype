@@ -14,7 +14,6 @@ const Profile = () => {
     // 如果可以解jwtToken則render畫面
     if (localStorage.getItem('jwtToken')) {
       const token = localStorage.getItem('jwtToken');
-      console.log('可以render');
 
       const fetchData = async () => {
         const profileUrl = 'http://localhost:3000/api/1.0/user/profile';
@@ -40,7 +39,6 @@ const Profile = () => {
       };
       fetchData();
     } else {
-      console.log('不可以render profile畫面');
       navigate(`/account`, {
         state: { identity: 'owner', name: 'ckscks038038', created_on: 123 },
       });
@@ -52,15 +50,15 @@ const Profile = () => {
   //   const name = location.state.name;
   //   const created_on = location.state.created_on;
   return (
-    <>
+    <div className="mt-72">
       {name ? (
         <div className="flex flex-col gap-28 text-gray-100">
-          <div className="top flex justify-between gap-20 border-2">
-            <h1>Name{name}</h1>
-            <div>joined date{joinedDate}</div>
-            <div>total tests{totalTest}</div>
-            <div>average cpm{cpm}</div>
-            <div>average accuracy{acc}</div>
+          <div className="top border-1 flex justify-between gap-20">
+            <ProfileDiv title={'Name'} data={name} />
+            <ProfileDiv title={'Joined date'} data={joinedDate} />
+            <ProfileDiv title={'total tests'} data={totalTest} />
+            <ProfileDiv title={'average cpm'} data={cpm} />
+            <ProfileDiv title={'average accuracy'} data={acc} />
           </div>
           <div className="body flex justify-between gap-20 border-2">
             <div>chart 1{typingData}</div>
@@ -69,7 +67,16 @@ const Profile = () => {
           <div className="border-2">footer</div>
         </div>
       ) : null}
-    </>
+    </div>
   );
 };
 export default Profile;
+
+const ProfileDiv = ({ title, data }) => {
+  return (
+    <div className="flex flex-col">
+      <div>{title}: </div>
+      <div> {data}</div>
+    </div>
+  );
+};

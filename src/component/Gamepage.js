@@ -27,6 +27,7 @@ const Gamepage = () => {
     totalTyped,
     replay,
     keydownHandler,
+    correctTyped,
   } = useMultiEngine();
   const [users, setUsers] = useState([]);
   const [winner, setWinner] = useState('');
@@ -61,6 +62,7 @@ const Gamepage = () => {
 
       //有人結束遊戲
       io.on('finish state', () => {
+        console.log('1');
         setState('finish');
         clearTyped();
         resetTotalTyped();
@@ -92,16 +94,22 @@ const Gamepage = () => {
   //在run state下，如果有totaltyped有更新=>傳更新的值(totalTyped)給server
   useEffect(() => {
     if (state === 'run') {
-      io.emit('update users progress', { roomId, totalTyped });
+      io.emit('update users progress', {
+        roomId,
+        totalTyped: correctTyped.current,
+      });
     }
-  }, [totalTyped]);
+  }, [correctTyped.current]);
 
   // 有人完成就改變狀態成finished
   useEffect(() => {
-    if (totalTyped === words.length) {
+    console.log(correctTyped.current);
+    if (correctTyped.current === words.length) {
+      console.log('2');
+      correctTyped.current = 0;
       io.emit('finish game', { roomId: roomId, id: io.id });
     }
-  }, [totalTyped]);
+  }, [correctTyped.current]);
 
   // 在updateWords以後再來儲存articles
   useEffect(() => {
@@ -122,52 +130,54 @@ const Gamepage = () => {
   }, [keydownHandler]);
   return (
     <>
-      <div className="mt-80 text-xl font-bold text-amber-50">
-        Room Code: {id}
-      </div>
-      <div className="text-gray-300">You are: {identity}</div>
-      <h2 className="text-gray-300">Total length: {words.length}</h2>
-      <div className="font-bold text-gray-300">GAME STATE:{state}</div>
-      <div className="mt-6">
-        {users.map((user) => {
-          if (io.id === user.id) {
-            return (
-              <div
-                className="text-xl	font-black	 text-violet-200"
-                key={`${user.name}_${user.typed}`}>
-                <h2> {user.name}(you)</h2>
-                <ProgressBar
-                  progressPercentage={(user.typed / words.length) * 100}
-                />
-              </div>
-            );
-          } else {
-            return (
-              <div
-                className=" text-xl font-black	text-zinc-400"
-                key={`${user.name}_${user.typed} `}>
-                <h2> {user.name}</h2>
-                {/* <h2>typed: {user.typed}</h2> */}
-                <ProgressBar
-                  progressPercentage={(user.typed / words.length) * 100}
-                />
-              </div>
-            );
-          }
-        })}
-      </div>
       {state !== 'finish' ? (
-        <WordsContainer>
-          <GeneratedWords words={words} />
-          <UserTypings
-            className="absolute inset-0"
-            userInput={typed}
-            words={words}
-            state={state}
-          />
-        </WordsContainer>
+        <>
+          <div className="mt-80 text-xl font-bold text-amber-50">
+            Room Code: {id}
+          </div>
+          <div className="text-gray-300">You are: {identity}</div>
+          <h2 className="text-gray-300">Total length: {words.length}</h2>
+          <div className="font-bold text-gray-300">GAME STATE:{state}</div>
+          <div className="mt-6">
+            {users.map((user) => {
+              if (io.id === user.id) {
+                return (
+                  <div
+                    className="text-xl	font-black	 text-violet-200"
+                    key={`${user.name}_${user.typed}`}>
+                    <h2> {user.name}(you)</h2>
+                    <ProgressBar
+                      progressPercentage={(user.typed / words.length) * 100}
+                    />
+                  </div>
+                );
+              } else {
+                return (
+                  <div
+                    className=" text-xl font-black	text-zinc-400"
+                    key={`${user.name}_${user.typed} `}>
+                    <h2> {user.name}</h2>
+                    {/* <h2>typed: {user.typed}</h2> */}
+                    <ProgressBar
+                      progressPercentage={(user.typed / words.length) * 100}
+                    />
+                  </div>
+                );
+              }
+            })}
+          </div>
+          <WordsContainer>
+            <GeneratedWords words={words} />
+            <UserTypings
+              className="absolute inset-0"
+              userInput={typed}
+              words={words}
+              state={state}
+            />
+          </WordsContainer>
+        </>
       ) : (
-        <div className="mt-20 text-xl text-slate-200 ">{`winner is ${winner}`}</div>
+        <div className="mt-80 text-xl text-slate-200 ">{`winner is ${winner}`}</div>
       )}
 
       {

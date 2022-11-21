@@ -11,12 +11,12 @@ const Account = () => {
   const navigate = useNavigate();
   useEffect(() => {
     if (localStorage.getItem('jwtToken')) {
-      console.log('可以render');
+      
       navigate(`/profile`, {
         state: { identity: 'owner', name: 'ckscks038038', created_on: 123 },
       });
     } else {
-      console.log('不可以render');
+      
     }
   }, []);
   const SignupUrl = `http://localhost:3000/api/1.0/user/signup`;
@@ -147,7 +147,7 @@ const Account = () => {
               type="text"
               name="email"
               placeholder=" email"
-              className="my-4 rounded-sm bg-primary-400"
+              className="my-4 rounded-sm bg-primary-100"
             />
             <input
               onChange={(e) => {

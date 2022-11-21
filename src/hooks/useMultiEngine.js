@@ -4,7 +4,7 @@ import useCountdownTimer from './useCountdownTimer';
 import useMultiTypings from './useMultiTyping';
 import { countErrors } from '../utils/helper';
 
-const NUMBER_OF_WORDS = 10;
+const NUMBER_OF_WORDS = 12;
 const COUNTDOWN_SECONDS = 20000;
 
 const useMultiEngine = () => {
@@ -20,13 +20,15 @@ const useMultiEngine = () => {
     totalTyped,
     replay,
     keydownHandler,
+    correctTyped,
   } = useMultiTypings(state !== 'finish', words);
 
   const [errors, setErrors] = useState(0);
 
   const isStarting = state === 'start' && cursor > 0;
 
-  const areWordsFinished = cursor === words.length;
+  const areWordsFinished =
+    cursor === words.length && correctTyped.current === words.length;
 
   const restart = useCallback(() => {
     resetCountdown();
@@ -81,6 +83,7 @@ const useMultiEngine = () => {
     replay,
     setState,
     keydownHandler,
+    correctTyped,
   };
 };
 
