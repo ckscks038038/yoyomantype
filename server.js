@@ -71,8 +71,13 @@ io.on('connection', (socket) => {
     //回傳文章給guest
 
     socket.emit('get article', getArticleFromMap(roomId));
-    //broadcast給所有玩家修改遊戲狀態(state)
+    //broadcast給房主修改遊戲狀態(state)
     io.to(roomId).emit('run state');
+  });
+
+  //房主改動狀態=>廣播給所有房客
+  socket.on('change guest state', ({ state, roomId }) => {
+    io.to(roomId).emit('change guest state', state);
   });
 
   //結束遊戲

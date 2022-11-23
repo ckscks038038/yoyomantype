@@ -59,13 +59,9 @@ const Gamepage = () => {
         setUsers(arrOfUsersProgress);
       });
 
-      //房主開始遊戲
-      io.on('run state', () => {
-        setState('run');
-      });
-
       //有人結束遊戲
       io.on('finish state', () => {
+        io.gameState = 'finish';
         setState('finish');
         clearTyped();
         resetTotalTyped();
@@ -83,14 +79,31 @@ const Gamepage = () => {
   }, [io]);
 
   const initOwnerSocket = () => {
+    io.gameState = 'start';
     io.emit('create room', roomId);
     //儲存文章到roomMap
     io.emit('save article', { roomId, words });
+
+    //房主開始遊戲，如果是finish狀態，要先進到start狀態; 最後廣播給房客當前狀態
+    io.on('run state', () => {
+      const toBeState = io.gameState === 'finish' ? 'start' : 'run';
+      io.gameState = toBeState;
+      setState(toBeState);
+
+      //廣播給房客
+      io.emit('change guest state', { state: toBeState, roomId: roomId });
+      console.log('房主更新state', toBeState);
+    });
   };
   const initGuestSocket = () => {
     io.emit('join room', roomId);
     io.on('get article', (article) => {
       setWords(article);
+    });
+
+    io.on('change guest state', (state) => {
+      console.log('房客接受state', state);
+      setState(state);
     });
   };
 
@@ -192,6 +205,7 @@ const Gamepage = () => {
                     io.emit('start game', roomId);
                   }
                 : () => {
+                    // console.log('按下button時的狀態', state);
                     updateWords();
                     io.emit('start game', roomId);
                   }
