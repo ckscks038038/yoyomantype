@@ -3,24 +3,18 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import MultiplayerPage from './component/MultiplayerPage';
 import Homepage from './component/Homepage';
 import KeyboardButton from './component/KeyboardButton';
-
 import Gamepage from './component/Gamepage';
 import Account from './component/Account';
 import AccountButton from './component/AccountButton';
 import Profile from './component/Profile';
 import LogOutButton from './component/LogoutButton';
-
+import logoImg from './image/logo.png';
 function App() {
   return (
     <>
       <nav className=" absolute left-72 top-10 flex">
         <Link to="/">
-          <input
-            type="image"
-            src="logo.png"
-            width="350 "
-            className="mt-10 mr-10"
-          />
+          <img alt="logo" src={logoImg} width="350" className="mt-10 mr-10" />
         </Link>
         <Link to="/">
           <KeyboardButton className={'mx-auto mt-10 text-slate-500'} />

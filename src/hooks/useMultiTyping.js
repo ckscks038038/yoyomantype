@@ -13,9 +13,9 @@ const isKeyboardCodeAllowed = (code) => {
 const useMultiTypings = (enabled, words) => {
   const [cursor, setCursor] = useState(0);
   const [typed, setTyped] = useState('');
+  const [replay, setReplay] = useState([]);
   const typedRef = useRef('');
   const totalTyped = useRef(0);
-  const [replay, setReplay] = useState([]);
   const correctTyped = useRef(0);
   const keydownHandler = useCallback(
     ({ key, code }) => {
@@ -38,7 +38,8 @@ const useMultiTypings = (enabled, words) => {
           if (
             correctTyped.current > 0 &&
             typedRef.current[totalTyped.current - 1] ===
-              words[totalTyped.current - 1]
+              words[totalTyped.current - 1] &&
+            totalTyped.current <= words.length
           ) {
             correctTyped.current -= 1;
           }
@@ -55,14 +56,18 @@ const useMultiTypings = (enabled, words) => {
 
           break;
         default:
-          setTyped((prev) => prev.concat(key));
-          setCursor((prev) => prev + 1);
-          totalTyped.current += 1;
-          //打對字要增加
-          if (key === words[totalTyped.current - 1]) {
-            correctTyped.current += 1;
+          //只有在還沒超過words長度時增加，超過就忽略
+          if (totalTyped.current < words.length) {
+            setTyped((prev) => prev.concat(key));
+            setCursor((prev) => prev + 1);
+            totalTyped.current += 1;
+            typedRef.current += key;
+
+            //打對字要增加
+            if (key === words[totalTyped.current - 1]) {
+              correctTyped.current += 1;
+            }
           }
-          typedRef.current += key;
       }
     },
     [enabled, words]

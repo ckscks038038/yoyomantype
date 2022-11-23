@@ -5,13 +5,11 @@ import useMultiTypings from './useMultiTyping';
 import { countErrors } from '../utils/helper';
 
 const NUMBER_OF_WORDS = 12;
-const COUNTDOWN_SECONDS = 20000;
 
 const useMultiEngine = () => {
   const [state, setState] = useState('start');
   const { words, updateWords, setWords } = useWords(NUMBER_OF_WORDS);
-  const { timeLeft, startCountdown, resetCountdown } =
-    useCountdownTimer(COUNTDOWN_SECONDS);
+
   const {
     typed,
     cursor,
@@ -31,34 +29,24 @@ const useMultiEngine = () => {
     cursor === words.length && correctTyped.current === words.length;
 
   const restart = useCallback(() => {
-    resetCountdown();
     resetTotalTyped();
     setState('start');
     setErrors(0);
     updateWords();
     clearTyped();
-  }, [clearTyped, updateWords, resetCountdown, resetTotalTyped]);
+  }, [clearTyped, updateWords, resetTotalTyped]);
 
   const sumErrors = useCallback(() => {
     const wordsReached = words.substring(0, Math.min(cursor, words.length));
     setErrors((prevErrors) => prevErrors + countErrors(typed, wordsReached));
   }, [typed, words, cursor]);
 
-  // as soon the user starts typing the first letter, we start
+  //當使用者開始打字, 把狀態改成run
   useEffect(() => {
     if (isStarting) {
       setState('run');
-      startCountdown();
     }
-  }, [isStarting, startCountdown]);
-
-  // 時間到，狀態改成finished
-  useEffect(() => {
-    if (!timeLeft && state === 'run') {
-      setState('finish');
-      sumErrors();
-    }
-  }, [timeLeft, state, sumErrors]);
+  }, [isStarting]);
 
   //字都打完，刷新一組新字
   useEffect(() => {
@@ -78,7 +66,6 @@ const useMultiEngine = () => {
     resetTotalTyped,
     errors,
     restart,
-    timeLeft,
     totalTyped,
     replay,
     setState,

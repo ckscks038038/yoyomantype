@@ -73,11 +73,11 @@ const MultiplayerPage = () => {
             value="create room"
             onClick={createRoom}
           />
-
+          <div className="font-bold text-slate-400">or</div>
           <div className="ml-8 flex space-x-1">
             <input
               placeholder="enter room code"
-              className="w-52 rounded-md bg-slate-400 px-3 placeholder-gray-500"
+              className="w-52 rounded-md bg-slate-200 px-3 placeholder-gray-500"
               value={inputValue}
               onChange={(event) => {
                 setinputValue(event.target.value);

@@ -10,15 +10,18 @@ const io = webSocket('http://localhost:3000');
 const Gamepage = () => {
   const { id } = useParams();
   let location = useLocation();
-  const identity = location.state.identity;
-  const roomId = location.state.roomId;
+
+  const identity = location?.state?.identity
+    ? location.state.identity
+    : 'guest';
+  const roomId = id;
+
   const {
     state,
     setState,
     words,
     setWords,
     updateWords,
-    timeLeft,
     typed,
     clearTyped,
     errors,
@@ -131,7 +134,7 @@ const Gamepage = () => {
       {state !== 'finish' ? (
         <>
           <div className="mt-80 text-xl font-bold text-amber-50">
-            Room Code: {id}
+            Room Code: {roomId}
           </div>
           <div className="text-gray-300">You are: {identity}</div>
           <h2 className="text-gray-300">Total length: {words.length}</h2>
