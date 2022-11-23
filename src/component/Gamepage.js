@@ -183,7 +183,7 @@ const Gamepage = () => {
 
       {
         //只有房主擁有開始遊戲權力
-        identity === 'owner' && (state === 'start' || state === 'finish') ? (
+        identity === 'owner' && state !== 'run' ? (
           <MultiPlayerStartButton
             className="mt-5 text-slate-500"
             handleStart={

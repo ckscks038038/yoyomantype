@@ -58,11 +58,7 @@ const changeFinishStateToMap = (roomId) => {
 
 //離開房間
 const removeUserFromRoomInMap = (roomId, userId) => {
-  console.log('roomId', roomId, userId);
-  console.log('到底', rooms[roomId]);
-
   delete rooms[roomId].users[userId];
-  console.log('確認是否移除使用者', rooms[roomId].users);
 };
 
 const findUserInRoomInMap = (userId) => {

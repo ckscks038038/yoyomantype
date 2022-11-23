@@ -19,15 +19,17 @@ const useMultiEngine = () => {
     replay,
     keydownHandler,
     correctTyped,
-  } = useMultiTypings(state !== 'finish', words);
+  } = useMultiTypings(state !== 'finish' && state !== 'start', words);
 
   const [errors, setErrors] = useState(0);
 
-  const isStarting = state === 'start' && cursor > 0;
+  // const isStarting = state === 'start' && cursor > 0;
+  const isStarting = state === 'run';
 
   const areWordsFinished =
     cursor === words.length && correctTyped.current === words.length;
 
+  //開始新的一局前，重製所有設定
   const restart = useCallback(() => {
     resetTotalTyped();
     setState('start');
@@ -41,12 +43,12 @@ const useMultiEngine = () => {
     setErrors((prevErrors) => prevErrors + countErrors(typed, wordsReached));
   }, [typed, words, cursor]);
 
-  //當使用者開始打字, 把狀態改成run
-  useEffect(() => {
-    if (isStarting) {
-      setState('run');
-    }
-  }, [isStarting]);
+  //當使用者開始打字, 把狀態改成run (isStarting要依據button按下的狀態改變)
+  // useEffect(() => {
+  //   if (isStarting) {
+  //     setState('run');
+  //   }
+  // }, [isStarting]);
 
   //字都打完，刷新一組新字
   useEffect(() => {
