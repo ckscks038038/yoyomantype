@@ -31,6 +31,10 @@ const Gamepage = () => {
     replay,
     keydownHandler,
     correctTyped,
+    COUNTDOWN_SECONDS,
+    timeLeft,
+    startCountdown,
+    resetCountdown,
   } = useMultiEngine();
 
   const [users, setUsers] = useState([]);
@@ -92,7 +96,7 @@ const Gamepage = () => {
 
       //廣播給房客
       io.emit('change guest state', { state: toBeState, roomId: roomId });
-      console.log('房主更新state', toBeState);
+      // console.log('房主更新state', toBeState);
     });
   };
   const initGuestSocket = () => {
@@ -102,8 +106,17 @@ const Gamepage = () => {
     });
 
     io.on('change guest state', (state) => {
-      console.log('房客接受state', state);
+      // console.log('房客接受state', state);
       setState(state);
+    });
+
+    io.on('startCountdown', () => {
+      console.log('startCountdown');
+      startCountdown();
+    });
+    io.on('resetCountdown', () => {
+      console.log('resetCountdown');
+      resetCountdown();
     });
   };
 
@@ -152,6 +165,7 @@ const Gamepage = () => {
           <div className="text-gray-300">You are: {identity}</div>
           <h2 className="text-gray-300">Total length: {words.length}</h2>
           <div className="font-bold text-gray-300">GAME STATE:{state}</div>
+          <h2 className="text-gray-300">Time left: {timeLeft}</h2>
           <div className="mt-6">
             {users.map((user) => {
               if (io.id === user.id) {
@@ -210,6 +224,19 @@ const Gamepage = () => {
                     io.emit('start game', roomId);
                   }
             }
+            countdown={
+              state === 'finish'
+                ? () => {
+                    resetCountdown();
+                    io.emit('resetCountdown', roomId);
+                  }
+                : () => {
+                    startCountdown();
+                    io.emit('startCountdown', roomId);
+                  }
+            }
+            countdownSecond={COUNTDOWN_SECONDS}
+            state={state}
           />
         ) : null
       }

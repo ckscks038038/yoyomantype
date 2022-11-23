@@ -1,11 +1,24 @@
 import { useRef } from 'react';
 import { VscDebugStart } from 'react-icons/vsc';
 
-const MultiPlayerStartButton = ({ handleStart, className = '' }) => {
+const MultiPlayerStartButton = ({
+  handleStart,
+  className = '',
+  countdown,
+  countdownSecond,
+  state,
+}) => {
   const buttonRef = useRef(null);
   const handleClick = () => {
     buttonRef.current?.blur();
-    handleStart();
+    if (state === 'finish') {
+      handleStart();
+    } else {
+      setTimeout(handleStart, countdownSecond * 1000);
+    }
+
+    countdown();
+    console.log(countdownSecond);
   };
 
   return (

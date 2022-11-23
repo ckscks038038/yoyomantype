@@ -131,6 +131,15 @@ io.on('connection', (socket) => {
     io.to(roomId).emit('send users progress', usersProgress);
   });
 
+  //更新房客倒數狀態
+  socket.on('resetCountdown', (roomId) => {
+    io.to(roomId).emit('resetCountdown');
+  });
+
+  socket.on('startCountdown', (roomId) => {
+    io.to(roomId).emit('startCountdown');
+  });
+
   // 當使用者斷線，要做leave room 動作
   socket.on('disconnect', () => {
     //找到使用者在哪一間rooms
