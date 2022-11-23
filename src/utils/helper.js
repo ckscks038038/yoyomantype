@@ -51,5 +51,5 @@ export const GeneratedWords = ({ words }) => {
 };
 
 export const CountdownTimer = ({ timeLeft }) => {
-  return <h2 className="font-medium text-primary-400">Time: {timeLeft}</h2>;
+  return <h2 className="text-3xl font-medium text-primary-400"> {timeLeft}</h2>;
 };

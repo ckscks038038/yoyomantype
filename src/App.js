@@ -15,7 +15,12 @@ function App() {
     <>
       <nav className=" absolute left-72 top-10 flex">
         <Link to="/">
-          <input type="image" src="logo.png" width="300 " className="mt-10" />
+          <input
+            type="image"
+            src="logo.png"
+            width="350 "
+            className="mt-10 mr-10"
+          />
         </Link>
         <Link to="/">
           <KeyboardButton className={'mx-auto mt-10 text-slate-500'} />

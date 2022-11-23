@@ -11,12 +11,10 @@ const Account = () => {
   const navigate = useNavigate();
   useEffect(() => {
     if (localStorage.getItem('jwtToken')) {
-      
       navigate(`/profile`, {
         state: { identity: 'owner', name: 'ckscks038038', created_on: 123 },
       });
     } else {
-      
     }
   }, []);
   const SignupUrl = `http://localhost:3000/api/1.0/user/signup`;
@@ -174,7 +172,7 @@ const Account = () => {
                   console.log('fail', val);
                 });
             }}>
-            <div className="font-bold text-primary-400">or login</div>
+            <div className="font-bold text-primary-400 ">or login</div>
             <input
               onChange={(e) => {
                 handleSignInChange(e);

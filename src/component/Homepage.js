@@ -40,11 +40,11 @@ function Homepage() {
           </WordsContainer>
         </div>
       ) : (
-        <div className="mt-72">
+        <div className="mt-44">
           <div className="flex space-x-2">
             <Results
               state={state}
-              className="mt-10 mr-20  w-1/6"
+              className="mt-20 mr-20  w-1/6"
               errors={errors}
               accuracyPercentage={calculateAccuracyPercentage(
                 errors,

@@ -61,34 +61,37 @@ const MultiplayerPage = () => {
 
   return (
     <>
-      <h1 className="mb-10 mt-72 text-6xl font-black	text-primary-400">
-        MULTIPLAYER MODE
-      </h1>
-      <TiGroup className=" mb-10 ml-36 h-60 w-60   text-primary-100" />
-      <div className="mb-14 flex justify-around">
-        <input
-          type="button"
-          className="rounded-md border-2 bg-slate-100 px-2 font-semibold"
-          value="create room"
-          onClick={createRoom}
-        />
-
-        <div className="flex space-x-1">
+      <div className="grid justify-items-center">
+        <h1 className="p- mb-10 mt-56 rounded-xl	bg-primary-500 px-7 text-3xl font-black text-slate-800">
+          MULTIPLAYER MODE
+        </h1>
+        <TiGroup className=" mb-10  h-60 w-60   text-slate-100" />
+        <div className="grid justify-items-center space-y-5">
           <input
-            placeholder="enter room code"
-            className="w-48 rounded-md bg-slate-400 pl-3 placeholder-gray-500"
-            value={inputValue}
-            onChange={(event) => {
-              setinputValue(event.target.value);
-            }}
-          />
-          <TiChevronRight
             type="button"
-            onClick={checkRoom}
-            className="h-6 w-6 rounded-md border-2 border-gray-800 text-slate-400"
+            className="rounded-md border-2 bg-slate-100 px-2 font-semibold"
+            value="create room"
+            onClick={createRoom}
           />
+
+          <div className="ml-8 flex space-x-1">
+            <input
+              placeholder="enter room code"
+              className="w-52 rounded-md bg-slate-400 px-3 placeholder-gray-500"
+              value={inputValue}
+              onChange={(event) => {
+                setinputValue(event.target.value);
+              }}
+            />
+            <TiChevronRight
+              type="button"
+              onClick={checkRoom}
+              className="h-6 w-6 rounded-md border-2 border-gray-800 text-slate-400"
+            />
+          </div>
         </div>
       </div>
+
       <ToastContainer
         position="top-right"
         autoClose={5000}
@@ -105,7 +108,4 @@ const MultiplayerPage = () => {
   );
 };
 
-const WordsContainer = ({ children }) => {
-  return <div className=" text-1xl flex  space-x-4 ">{children}</div>;
-};
 export default MultiplayerPage;

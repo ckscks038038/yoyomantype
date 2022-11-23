@@ -29,6 +29,7 @@ const Gamepage = () => {
     keydownHandler,
     correctTyped,
   } = useMultiEngine();
+
   const [users, setUsers] = useState([]);
   const [winner, setWinner] = useState('');
   useEffect(() => {
@@ -62,7 +63,6 @@ const Gamepage = () => {
 
       //有人結束遊戲
       io.on('finish state', () => {
-        console.log('1');
         setState('finish');
         clearTyped();
         resetTotalTyped();
@@ -103,9 +103,7 @@ const Gamepage = () => {
 
   // 有人完成就改變狀態成finished
   useEffect(() => {
-    console.log(correctTyped.current);
     if (correctTyped.current === words.length) {
-      console.log('2');
       correctTyped.current = 0;
       io.emit('finish game', { roomId: roomId, id: io.id });
     }

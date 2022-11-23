@@ -61,12 +61,11 @@ const useMultiTypings = (enabled, words) => {
           //打對字要增加
           if (key === words[totalTyped.current - 1]) {
             correctTyped.current += 1;
-            console.log('useTyings->correctedTyped');
           }
           typedRef.current += key;
       }
     },
-    [enabled]
+    [enabled, words]
   );
 
   //重設replay儲存、打字紀錄、cursor位置
