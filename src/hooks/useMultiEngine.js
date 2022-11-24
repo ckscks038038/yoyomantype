@@ -9,6 +9,7 @@ const COUNTDOWN_SECONDS = 3;
 const useMultiEngine = () => {
   const [state, setState] = useState('start');
   const { words, updateWords, setWords } = useWords(NUMBER_OF_WORDS);
+
   const { timeLeft, startCountdown, resetCountdown } =
     useCountdownTimer(COUNTDOWN_SECONDS);
   const {

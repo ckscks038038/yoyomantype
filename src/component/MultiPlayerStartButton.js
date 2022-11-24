@@ -18,7 +18,6 @@ const MultiPlayerStartButton = ({
     }
 
     countdown();
-    console.log(countdownSecond);
   };
 
   return (

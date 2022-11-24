@@ -165,7 +165,7 @@ const Gamepage = () => {
           <div className="text-gray-300">You are: {identity}</div>
           <h2 className="text-gray-300">Total length: {words.length}</h2>
           <div className="font-bold text-gray-300">GAME STATE:{state}</div>
-          <h2 className="text-gray-300">Time left: {timeLeft}</h2>
+          <h2 className={`text-gray-300 `}>Time left: {timeLeft}</h2>
           <div className="mt-6">
             {users.map((user) => {
               if (io.id === user.id) {
