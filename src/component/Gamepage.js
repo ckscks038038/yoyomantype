@@ -5,8 +5,8 @@ import { GeneratedWords, WordsContainer } from '../utils/helper';
 import UserTypings from './UserTypings';
 import MultiPlayerStartButton from './MultiPlayerStartButton';
 import webSocket from 'socket.io-client';
-// const io = webSocket('http://localhost:3300');
-const io = webSocket('http://localhost:3000');
+const io = webSocket(`${process.env.REACT_APP_SOCKET_URL}`);
+
 const Gamepage = () => {
   const { id } = useParams();
   let location = useLocation();

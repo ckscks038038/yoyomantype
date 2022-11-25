@@ -17,8 +17,9 @@ const Account = () => {
     } else {
     }
   }, []);
-  const SignupUrl = `http://localhost:3000/api/1.0/user/signup`;
-  const SigninUrl = 'http://localhost:3000/api/1.0/user/signin';
+
+  const SignupUrl = `${process.env.REACT_APP_API_URL}user/signup`;
+  const SigninUrl = `${process.env.REACT_APP_API_URL}user/signin`;
 
   // SignUp, SignIn data
   const [signupData, setSignUpData] = useState({

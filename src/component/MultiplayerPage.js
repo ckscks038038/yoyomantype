@@ -7,8 +7,8 @@ import { TiGroup } from 'react-icons/ti';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 const { v4: uuidv4 } = require('uuid');
-const io = webSocket('http://localhost:3000');
-// const io = webSocket();
+const io = webSocket(`${process.env.REACT_APP_SOCKET_URL}`);
+
 const MultiplayerPage = () => {
   const [inputValue, setinputValue] = useState('');
   const navigate = useNavigate();
