@@ -4,6 +4,8 @@ import { ResponsiveLine } from '@nivo/line';
 const LineChart = ({ data }) => {
   return (
     <ResponsiveLine
+      width={1300}
+      height={400}
       data={data}
       theme={{
         textColor: '#94a3b8',
@@ -64,7 +66,7 @@ const LineChart = ({ data }) => {
         tickPadding: 5,
         tickRotation: 0,
         legend: 'character per minute',
-        legendOffset: 44,
+        legendOffset: 37,
         legendPosition: 'middle',
       }}
       axisLeft={{
@@ -73,7 +75,7 @@ const LineChart = ({ data }) => {
         tickPadding: 5,
         tickRotation: 0,
         legend: 'count',
-        legendOffset: -40,
+        legendOffset: -55,
         legendPosition: 'middle',
       }}
       enableGridX={false}
