@@ -4,7 +4,7 @@ import useCountdownTimer from './useCountdownTimer';
 import useMultiTypings from './useMultiTyping';
 import { countErrors } from '../utils/helper';
 
-const NUMBER_OF_WORDS = 12;
+const NUMBER_OF_WORDS = 5;
 const COUNTDOWN_SECONDS = 3;
 const useMultiEngine = () => {
   const [state, setState] = useState('start');

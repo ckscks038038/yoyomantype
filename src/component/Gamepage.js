@@ -54,6 +54,9 @@ const Gamepage = () => {
       io.on('send users progress', (usersProgress) => {
         const arrOfUsersId = Object.keys(usersProgress.users);
         const arrOfUsersProgress = arrOfUsersId.map((id) => {
+          console.log(
+            `${usersProgress.users[id].name}: ${usersProgress.users[id].typed}`
+          );
           return {
             name: usersProgress.users[id].name,
             typed: usersProgress.users[id].typed,
@@ -114,6 +117,8 @@ const Gamepage = () => {
       console.log('startCountdown');
       startCountdown();
     });
+
+    // state在finish時 房主會emit resetCountdown
     io.on('resetCountdown', () => {
       console.log('resetCountdown');
       resetCountdown();
@@ -220,6 +225,7 @@ const Gamepage = () => {
                   }
                 : () => {
                     // console.log('按下button時的狀態', state);
+                    io.emit('get users progress', roomId);
                     updateWords();
                     io.emit('start game', roomId);
                   }

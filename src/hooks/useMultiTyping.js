@@ -83,6 +83,7 @@ const useMultiTypings = (enabled, words) => {
 
   const resetTotalTyped = useCallback(() => {
     totalTyped.current = 0;
+    correctTyped.current = 0;
   }, []);
 
   return {

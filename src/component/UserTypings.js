@@ -9,11 +9,6 @@ const UserTypings = ({ userInput, className, words, state }) => {
   // 如果是typed範圍內，return<Character...actual>
   // 如果是typed範圍外，return<Character...expect, 透明>
 
-  //紀錄錯字
-  const count = useRef(0);
-  count.current += 1;
-  console.log(count.current);
-
   return (
     <>
       <div className={className}>

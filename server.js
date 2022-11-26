@@ -95,6 +95,7 @@ io.on('connection', (socket) => {
     const users = getUsersProgressInMap(roomId);
     const arrOfUserId = Object.keys(users.users);
 
+    console.log('arrOfUserId', arrOfUserId);
     //更新typed=0
     arrOfUserId.forEach((userId) => {
       updateUsersProgressToMap(roomId, userId, 0);

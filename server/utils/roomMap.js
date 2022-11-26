@@ -86,8 +86,6 @@ const getUsersProgressInMap = (roomId) => {
 
 //更新房間玩家狀態
 const updateUsersProgressToMap = (roomId, userId, totalTyped) => {
-  // console.log('檢查', roomId, userId, totalTyped);
-
   //rooms[rooomId]如果是null會報錯
   if (rooms[roomId] && rooms[roomId].users[userId]) {
     rooms[roomId].users[userId].typed = totalTyped;
