@@ -39,6 +39,7 @@ const Gamepage = () => {
 
   const [users, setUsers] = useState([]);
   const [winner, setWinner] = useState('');
+
   useEffect(() => {
     if (io) {
       if (identity === 'owner') {
@@ -224,7 +225,6 @@ const Gamepage = () => {
                     io.emit('start game', roomId);
                   }
                 : () => {
-                    // console.log('按下button時的狀態', state);
                     io.emit('get users progress', roomId);
                     updateWords();
                     io.emit('start game', roomId);
