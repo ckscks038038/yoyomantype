@@ -1,14 +1,14 @@
 import cn from 'classnames';
 import Caret from './Caret';
-
+import { useRef, useState } from 'react';
 const UserTypings = ({ userInput, className, words, state }) => {
   const typedCharacters = userInput.split('');
   const wordsCharacters = words.split('');
-
   const typedLen = typedCharacters.length;
   // run過所有打過的字，
   // 如果是typed範圍內，return<Character...actual>
   // 如果是typed範圍外，return<Character...expect, 透明>
+
   return (
     <>
       <div className={className}>
@@ -41,6 +41,7 @@ const UserTypings = ({ userInput, className, words, state }) => {
 const Character = ({ actual, expected, transparent }) => {
   const isCorrect = actual === expected;
   const isWhiteSpace = expected === ' ';
+
   return (
     <span
       className={cn({

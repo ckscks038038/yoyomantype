@@ -10,12 +10,12 @@ const rooms = {};
 //**********************Mulitplayer Page ***********************/
 
 //創建房間(房主)
-const createNewRoomToMap = ({ roomId, ownerId }) => {
+const createNewRoomToMap = ({ roomId, ownerId, socket }) => {
   //給使用者隨機的動物名字
   const randomName = uniqueNamesGenerator({
     dictionaries: [colors, animals],
   });
-
+  socket.name = randomName;
   //儲存房主ID, 動物名稱
   rooms[roomId] = { users: {}, article: '', gameState: '' };
   rooms[roomId].users[ownerId] = { name: randomName, typed: 0 };
@@ -33,10 +33,11 @@ const getArticleFromMap = (roomId) => {
 };
 
 //加入房間(房客)
-const JoinRoomToMap = ({ roomId, userId }) => {
+const JoinRoomToMap = ({ roomId, userId, socket }) => {
   const randomName = uniqueNamesGenerator({
     dictionaries: [colors, animals],
   });
+  socket.name = randomName;
   rooms[roomId].users[userId] = { name: randomName, typed: 0 };
   console.log('(server)所有房間的人：', rooms[roomId].users);
 };
@@ -57,11 +58,7 @@ const changeFinishStateToMap = (roomId) => {
 
 //離開房間
 const removeUserFromRoomInMap = (roomId, userId) => {
-  console.log('roomId', roomId, userId);
-  console.log('到底', rooms[roomId]);
-
   delete rooms[roomId].users[userId];
-  console.log('確認是否移除使用者', rooms[roomId].users);
 };
 
 const findUserInRoomInMap = (userId) => {
@@ -89,8 +86,11 @@ const getUsersProgressInMap = (roomId) => {
 
 //更新房間玩家狀態
 const updateUsersProgressToMap = (roomId, userId, totalTyped) => {
-  // console.log('檢查', roomId, userId, totalTyped);
-  rooms[roomId].users[userId].typed = totalTyped;
+  //rooms[rooomId]如果是null會報錯
+  if (rooms[roomId] && rooms[roomId].users[userId]) {
+    rooms[roomId].users[userId].typed = totalTyped;
+  }
+
   // console.log('玩家進度：', rooms[roomId].users[userId].typed);
 };
 //檢查房間狀態

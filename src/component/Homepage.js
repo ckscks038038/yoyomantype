@@ -9,37 +9,66 @@ import {
   GeneratedWords,
   CountdownTimer,
 } from '../utils/helper';
+import Line from '../line';
 
 function Homepage() {
-  const { state, words, timeLeft, typed, errors, restart, totalTyped, replay } =
-    useEngine();
+  const {
+    state,
+    words,
+    timeLeft,
+    typed,
+    errors,
+    restart,
+    totalTyped,
+    replay,
+    COUNTDOWN_SECONDS,
+  } = useEngine();
 
   return (
     <>
-      <CountdownTimer timeLeft={timeLeft} />
-      <WordsContainer>
-        <GeneratedWords words={words} />
-        <UserTypings
-          className="absolute inset-0"
-          userInput={typed}
-          words={words}
-          state={state}
-        />
-      </WordsContainer>
+      {state !== 'finish' ? (
+        <div className="mt-80">
+          <CountdownTimer timeLeft={timeLeft} />
+          <WordsContainer>
+            <GeneratedWords words={words} />
+            <UserTypings
+              className="absolute inset-0"
+              userInput={typed}
+              words={words}
+              state={state}
+            />
+          </WordsContainer>
+        </div>
+      ) : (
+        <div className="mt-44">
+          <div className="flex space-x-2">
+            <Results
+              state={state}
+              className="mt-20 mr-20  w-1/6"
+              errors={errors}
+              accuracyPercentage={calculateAccuracyPercentage(
+                errors,
+                totalTyped
+              )}
+              total={totalTyped}
+            />
+            <Line
+              data={replay}
+              timeLength={COUNTDOWN_SECONDS}
+              className="w-5/6"
+            />
+          </div>
+
+          <div className="ml-32">
+            <div className=" mt-20 text-slate-500">Replay</div>
+            <Replay state={state} ans={words} replay={replay} />
+          </div>
+        </div>
+      )}
       <RestartButton
         className={'mx-auto mt-10 text-slate-500'}
         handleRestart={restart}
       />
-      <Results
-        state={state}
-        className="mt-10"
-        errors={errors}
-        accuracyPercentage={calculateAccuracyPercentage(errors, totalTyped)}
-        total={totalTyped}
-      />
-
-      <div className=" text-slate-500">Replay</div>
-      <Replay className="mt-10" state={state} ans={words} replay={replay} />
     </>
   );
 }

@@ -10,7 +10,7 @@ const Results = ({ state, errors, accuracyPercentage, total, className }) => {
   }
   return (
     <motion.ul
-      className={`flex flex-col items-center space-y-3 
+      className={`flex flex-col items-center space-y-10 
 			text-primary-400 ${className}`}>
       <motion.li
         initial={initial}

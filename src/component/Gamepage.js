@@ -5,20 +5,24 @@ import { GeneratedWords, WordsContainer } from '../utils/helper';
 import UserTypings from './UserTypings';
 import MultiPlayerStartButton from './MultiPlayerStartButton';
 import webSocket from 'socket.io-client';
-const io = webSocket('http://localhost:3300');
+import ProgressBar from './ProgressBar';
+const io = webSocket(`${process.env.REACT_APP_SOCKET_URL}`);
 
 const Gamepage = () => {
   const { id } = useParams();
   let location = useLocation();
-  const identity = location.state.identity;
-  const roomId = location.state.roomId;
+
+  const identity = location?.state?.identity
+    ? location.state.identity
+    : 'guest';
+  const roomId = id;
+
   const {
     state,
     setState,
     words,
     setWords,
     updateWords,
-    timeLeft,
     typed,
     clearTyped,
     errors,
@@ -26,8 +30,16 @@ const Gamepage = () => {
     resetTotalTyped,
     totalTyped,
     replay,
+    keydownHandler,
+    correctTyped,
+    COUNTDOWN_SECONDS,
+    timeLeft,
+    startCountdown,
+    resetCountdown,
   } = useMultiEngine();
+
   const [users, setUsers] = useState([]);
+  const [winner, setWinner] = useState('');
 
   useEffect(() => {
     if (io) {
@@ -53,45 +65,84 @@ const Gamepage = () => {
         setUsers(arrOfUsersProgress);
       });
 
-      //房主開始遊戲
-      io.on('run state', () => {
-        setState('run');
-      });
-
       //有人結束遊戲
       io.on('finish state', () => {
+        io.gameState = 'finish';
         setState('finish');
         clearTyped();
         resetTotalTyped();
+      });
+
+      //渲染贏家為何
+      io.on('winner', ({ winnerName, winnerId }) => {
+        setWinner(winnerName);
+        if (io.id === winnerId) {
+          console.log('you win');
+          setWinner('YOU!');
+        }
       });
     }
   }, [io]);
 
   const initOwnerSocket = () => {
+    io.gameState = 'start';
     io.emit('create room', roomId);
     //儲存文章到roomMap
     io.emit('save article', { roomId, words });
+
+    //房主開始遊戲，如果是finish狀態，要先進到start狀態; 最後廣播給房客當前狀態
+    io.on('run state', () => {
+      const toBeState = io.gameState === 'finish' ? 'start' : 'run';
+      io.gameState = toBeState;
+      console.log('狀態是', toBeState);
+      console.log('io id:', io.id);
+      setState(toBeState);
+
+      //廣播給房客
+      io.emit('change guest state', { state: toBeState, roomId: roomId });
+      // console.log('房主更新state', toBeState);
+    });
   };
   const initGuestSocket = () => {
     io.emit('join room', roomId);
     io.on('get article', (article) => {
       setWords(article);
     });
+
+    io.on('change guest state', (state) => {
+      // console.log('房客接受state', state);
+      setState(state);
+    });
+
+    io.on('startCountdown', () => {
+      console.log('startCountdown');
+      startCountdown();
+    });
+
+    // state在finish時 房主會emit resetCountdown
+    io.on('resetCountdown', () => {
+      console.log('resetCountdown');
+      resetCountdown();
+    });
   };
 
   //在run state下，如果有totaltyped有更新=>傳更新的值(totalTyped)給server
   useEffect(() => {
     if (state === 'run') {
-      io.emit('update users progress', { roomId, totalTyped });
+      io.emit('update users progress', {
+        roomId,
+        totalTyped: correctTyped.current,
+      });
     }
-  }, [totalTyped]);
+  }, [correctTyped.current]);
 
   // 有人完成就改變狀態成finished
   useEffect(() => {
-    if (totalTyped === words.length) {
-      io.emit('finish game', roomId);
+    if (correctTyped.current === words.length) {
+      correctTyped.current = 0;
+      io.emit('finish game', { roomId: roomId, id: io.id });
     }
-  }, [totalTyped]);
+  }, [correctTyped.current]);
 
   // 在updateWords以後再來儲存articles
   useEffect(() => {
@@ -102,57 +153,72 @@ const Gamepage = () => {
     }
   }, [words]);
 
+  // attach the keydown event listener to record keystrokes
+  useEffect(() => {
+    window.addEventListener('keydown', keydownHandler);
+    // Remove event listeners on cleandup
+    return () => {
+      window.removeEventListener('keydown', keydownHandler);
+    };
+  }, [keydownHandler]);
   return (
     <>
-      <div className="text-xl font-bold text-amber-50">Room Code: {id}</div>
-      <div className="text-gray-300">You are: {identity}</div>
-      <h2 className="text-gray-300">Total length: {words.length}</h2>
-      <div className="font-bold text-gray-300">GAME STATE:{state}</div>
-      <div className="mt-6">
-        {users.map((user) => {
-          if (io.id === user.id) {
-            return (
-              <div
-                className="text-xl	font-black	 text-violet-200"
-                key={`${user.name}_${user.typed}`}>
-                <h2> {user.name}(you)</h2>
-                <ProgressBar
-                  progressPercentage={(user.typed / words.length) * 100}
-                />
-              </div>
-            );
-          } else {
-            return (
-              <div
-                className=" text-xl font-black	text-zinc-400"
-                key={`${user.name}_${user.typed} `}>
-                <h2> {user.name}</h2>
-                {/* <h2>typed: {user.typed}</h2> */}
-                <ProgressBar
-                  progressPercentage={(user.typed / words.length) * 100}
-                />
-              </div>
-            );
-          }
-        })}
-      </div>
       {state !== 'finish' ? (
-        <WordsContainer>
-          <GeneratedWords words={words} />
-          <UserTypings
-            className="absolute inset-0"
-            userInput={typed}
-            words={words}
-            state={state}
-          />
-        </WordsContainer>
+        <>
+          <div className=" mt-80 ">
+            <div className="  text-xl  font-bold text-amber-50">
+              Room Code: {roomId}
+            </div>
+            <div className="text-gray-300">You are: {identity}</div>
+            <h2 className="text-gray-300">Total length: {words.length}</h2>
+          </div>{' '}
+          <div className="font-bold text-gray-300">GAME STATE:{state}</div>
+          <h2 className={`text-gray-300 `}>Time left: {timeLeft}</h2>
+          <div className="mt-6">
+            {users.map((user) => {
+              if (io.id === user.id) {
+                return (
+                  <div
+                    className="	text-xl	 font-black text-violet-200"
+                    key={`${user.name}_${user.typed}`}>
+                    <h2> {user.name}(you)</h2>
+                    <ProgressBar
+                      progressPercentage={(user.typed / words.length) * 100}
+                    />
+                  </div>
+                );
+              } else {
+                return (
+                  <div
+                    className=" text-xl font-black	text-zinc-400"
+                    key={`${user.name}_${user.typed} `}>
+                    <h2> {user.name}</h2>
+                    {/* <h2>typed: {user.typed}</h2> */}
+                    <ProgressBar
+                      progressPercentage={(user.typed / words.length) * 100}
+                    />
+                  </div>
+                );
+              }
+            })}
+          </div>
+          <WordsContainer>
+            <GeneratedWords words={words} />
+            <UserTypings
+              className="absolute inset-0"
+              userInput={typed}
+              words={words}
+              state={state}
+            />
+          </WordsContainer>
+        </>
       ) : (
-        <div className="mt-20 text-xl text-slate-200 ">Next Run Let's Go</div>
+        <div className="mt-80 text-xl text-slate-200 ">{`winner is ${winner}`}</div>
       )}
 
       {
         //只有房主擁有開始遊戲權力
-        identity === 'owner' && (state === 'start' || state === 'finish') ? (
+        identity === 'owner' && state !== 'run' ? (
           <MultiPlayerStartButton
             className="mt-5 text-slate-500"
             handleStart={
@@ -161,10 +227,31 @@ const Gamepage = () => {
                     io.emit('start game', roomId);
                   }
                 : () => {
+                    io.emit('get users progress', roomId);
                     updateWords();
                     io.emit('start game', roomId);
+                    console.log('按下');
                   }
             }
+            countdown={
+              state === 'finish'
+                ? () => {
+                    resetCountdown();
+                    io.emit('resetCountdown', roomId);
+
+                    //通知所有人把state設成start//廣播給房客
+                    io.emit('change guest state', {
+                      state: 'start',
+                      roomId: roomId,
+                    });
+                  }
+                : () => {
+                    startCountdown();
+                    io.emit('startCountdown', roomId);
+                  }
+            }
+            countdownSecond={COUNTDOWN_SECONDS}
+            state={state}
           />
         ) : null
       }
@@ -172,16 +259,30 @@ const Gamepage = () => {
   );
 };
 
-const ProgressBar = ({ progressPercentage }) => {
-  return (
-    <div className="h-2 w-6/12 rounded-2xl	 bg-gray-300">
-      <div
-        style={{ width: `${progressPercentage}%` }}
-        className={`h-full ${
-          progressPercentage < 70 ? 'bg-red-600' : 'bg-green-600'
-        }`}></div>
-    </div>
-  );
-};
+// const ProgressBar = ({ progressPercentage }) => {
+//   return (
+//     <div className="h-2 w-6/12 rounded-2xl	 bg-gray-300">
+//       <div
+//         style={{
+//           width: `${progressPercentage}%`,
+//           textAlign: 'right',
+//           borderRadius: 'inherit',
+//         }}
+//         className={`h-full ${
+//           progressPercentage < 20
+//             ? 'bg-primary-100'
+//             : progressPercentage < 40
+//             ? 'bg-primary-200'
+//             : progressPercentage < 60
+//             ? 'bg-primary-300'
+//             : progressPercentage < 80
+//             ? 'bg-primary-400'
+//             : 'bg-primary-500'
+//         }`}>
+//         <span>{`${Math.trunc(progressPercentage)}%`}</span>
+//       </div>
+//     </div>
+//   );
+// };
 
 export default Gamepage;
