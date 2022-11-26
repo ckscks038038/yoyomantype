@@ -65,6 +65,7 @@ const MultiplayerPage = () => {
         <h1 className="p- mb-10 mt-56 rounded-xl	bg-primary-500 px-7 text-3xl font-black text-slate-800">
           MULTIPLAYER MODE
         </h1>
+
         <TiGroup className=" mb-10  h-60 w-60   text-slate-100" />
         <div className="grid justify-items-center space-y-5">
           <input

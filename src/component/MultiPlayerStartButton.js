@@ -20,7 +20,6 @@ const MultiPlayerStartButton = ({
       setTimeout(handleStart, countdownSecond * 1000);
       setDisplayButton(0);
     }
-
     countdown();
   };
 

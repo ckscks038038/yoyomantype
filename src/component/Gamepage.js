@@ -5,6 +5,7 @@ import { GeneratedWords, WordsContainer } from '../utils/helper';
 import UserTypings from './UserTypings';
 import MultiPlayerStartButton from './MultiPlayerStartButton';
 import webSocket from 'socket.io-client';
+import ProgressBar from './ProgressBar';
 const io = webSocket(`${process.env.REACT_APP_SOCKET_URL}`);
 
 const Gamepage = () => {
@@ -55,9 +56,6 @@ const Gamepage = () => {
       io.on('send users progress', (usersProgress) => {
         const arrOfUsersId = Object.keys(usersProgress.users);
         const arrOfUsersProgress = arrOfUsersId.map((id) => {
-          console.log(
-            `${usersProgress.users[id].name}: ${usersProgress.users[id].typed}`
-          );
           return {
             name: usersProgress.users[id].name,
             typed: usersProgress.users[id].typed,
@@ -96,6 +94,8 @@ const Gamepage = () => {
     io.on('run state', () => {
       const toBeState = io.gameState === 'finish' ? 'start' : 'run';
       io.gameState = toBeState;
+      console.log('狀態是', toBeState);
+      console.log('io id:', io.id);
       setState(toBeState);
 
       //廣播給房客
@@ -165,11 +165,13 @@ const Gamepage = () => {
     <>
       {state !== 'finish' ? (
         <>
-          <div className="mt-80 text-xl font-bold text-amber-50">
-            Room Code: {roomId}
-          </div>
-          <div className="text-gray-300">You are: {identity}</div>
-          <h2 className="text-gray-300">Total length: {words.length}</h2>
+          <div className=" mt-80 ">
+            <div className="  text-xl  font-bold text-amber-50">
+              Room Code: {roomId}
+            </div>
+            <div className="text-gray-300">You are: {identity}</div>
+            <h2 className="text-gray-300">Total length: {words.length}</h2>
+          </div>{' '}
           <div className="font-bold text-gray-300">GAME STATE:{state}</div>
           <h2 className={`text-gray-300 `}>Time left: {timeLeft}</h2>
           <div className="mt-6">
@@ -177,7 +179,7 @@ const Gamepage = () => {
               if (io.id === user.id) {
                 return (
                   <div
-                    className="text-xl	font-black	 text-violet-200"
+                    className="	text-xl	 font-black text-violet-200"
                     key={`${user.name}_${user.typed}`}>
                     <h2> {user.name}(you)</h2>
                     <ProgressBar
@@ -228,6 +230,7 @@ const Gamepage = () => {
                     io.emit('get users progress', roomId);
                     updateWords();
                     io.emit('start game', roomId);
+                    console.log('按下');
                   }
             }
             countdown={
@@ -235,6 +238,12 @@ const Gamepage = () => {
                 ? () => {
                     resetCountdown();
                     io.emit('resetCountdown', roomId);
+
+                    //通知所有人把state設成start//廣播給房客
+                    io.emit('change guest state', {
+                      state: 'start',
+                      roomId: roomId,
+                    });
                   }
                 : () => {
                     startCountdown();
@@ -250,16 +259,30 @@ const Gamepage = () => {
   );
 };
 
-const ProgressBar = ({ progressPercentage }) => {
-  return (
-    <div className="h-2 w-6/12 rounded-2xl	 bg-gray-300">
-      <div
-        style={{ width: `${progressPercentage}%` }}
-        className={`h-full ${
-          progressPercentage < 70 ? 'bg-red-600' : 'bg-green-600'
-        }`}></div>
-    </div>
-  );
-};
+// const ProgressBar = ({ progressPercentage }) => {
+//   return (
+//     <div className="h-2 w-6/12 rounded-2xl	 bg-gray-300">
+//       <div
+//         style={{
+//           width: `${progressPercentage}%`,
+//           textAlign: 'right',
+//           borderRadius: 'inherit',
+//         }}
+//         className={`h-full ${
+//           progressPercentage < 20
+//             ? 'bg-primary-100'
+//             : progressPercentage < 40
+//             ? 'bg-primary-200'
+//             : progressPercentage < 60
+//             ? 'bg-primary-300'
+//             : progressPercentage < 80
+//             ? 'bg-primary-400'
+//             : 'bg-primary-500'
+//         }`}>
+//         <span>{`${Math.trunc(progressPercentage)}%`}</span>
+//       </div>
+//     </div>
+//   );
+// };
 
 export default Gamepage;
