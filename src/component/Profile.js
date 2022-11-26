@@ -17,7 +17,7 @@ const Profile = () => {
       const token = localStorage.getItem('jwtToken');
 
       const fetchData = async () => {
-        const profileUrl = `${process.env.REACT_APP_SOCKET_URL}user/profile`;
+        const profileUrl = `${process.env.REACT_APP_API_URL}user/profile`;
         let headers = {
           'Content-Type': 'application/json',
           Accept: 'application/json',
