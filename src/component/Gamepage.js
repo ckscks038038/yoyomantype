@@ -94,8 +94,6 @@ const Gamepage = () => {
     io.on('run state', () => {
       const toBeState = io.gameState === 'finish' ? 'start' : 'run';
       io.gameState = toBeState;
-      console.log('狀態是', toBeState);
-      console.log('io id:', io.id);
       setState(toBeState);
 
       //廣播給房客

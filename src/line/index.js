@@ -3,7 +3,6 @@ import LineChart from '../component/LineChart';
 
 const Line = ({ data, timeLength }) => {
   //資料處理
-
   //0秒時打字總數設為0
   const finalLineChartData = [{ x: 0, y: 0 }];
   const arrWithoutNonCharData = data.filter((char) => {
@@ -11,6 +10,8 @@ const Line = ({ data, timeLength }) => {
   });
 
   //剩下從零開始的時間
+
+  console.log('Length', timeLength);
   const arrStartFromZeroData = arrWithoutNonCharData.map((char) => {
     return ((char.time - data[0].time) % 100000) / 1000;
   });

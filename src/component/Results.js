@@ -1,10 +1,18 @@
 import { motion } from 'framer-motion';
 import { formatPercentage } from '../utils/helper';
 
-const Results = ({ state, errors, accuracyPercentage, total, className }) => {
+const Results = ({
+  state,
+
+  accuracyPercentage,
+  total,
+  className,
+  time,
+  errorTyped,
+}) => {
   const initial = { opacity: 0 };
   const animate = { opacity: 1 };
-
+  console.log('time', time);
   if (state !== 'finish') {
     return null;
   }
@@ -23,6 +31,12 @@ const Results = ({ state, errors, accuracyPercentage, total, className }) => {
         initial={initial}
         animate={animate}
         transition={{ duration: 0.3, delay: 0.5 }}>
+        cpm: {Math.trunc((total / time) * 60)}
+      </motion.li>
+      <motion.li
+        initial={initial}
+        animate={animate}
+        transition={{ duration: 0.3, delay: 0.5 }}>
         Accuracy: {formatPercentage(accuracyPercentage)}
       </motion.li>
       <motion.li
@@ -30,8 +44,9 @@ const Results = ({ state, errors, accuracyPercentage, total, className }) => {
         animate={animate}
         transition={{ duration: 0.3, delay: 0.7 }}
         className="text-red-500">
-        Errors : {errors}
+        Errors : {errorTyped}
       </motion.li>
+
       <motion.li
         initial={initial}
         animate={animate}

@@ -22,8 +22,9 @@ function Homepage() {
     totalTyped,
     replay,
     COUNTDOWN_SECONDS,
+    errorIndex,
   } = useEngine();
-
+  const endTime = (replay[replay.length - 1]?.time - replay[0]?.time) / 1000;
   return (
     <>
       {state !== 'finish' ? (
@@ -40,21 +41,22 @@ function Homepage() {
           </WordsContainer>
         </div>
       ) : (
-        <div className="mt-44">
+        <div className="mt-44 ">
           <div className="flex space-x-2">
             <Results
               state={state}
               className="mt-20 mr-20  w-1/6"
-              errors={errors}
               accuracyPercentage={calculateAccuracyPercentage(
-                errors,
+                Object.keys(errorIndex.current).length,
                 totalTyped
               )}
               total={totalTyped}
+              time={Math.min(COUNTDOWN_SECONDS, endTime)}
+              errorTyped={Object.keys(errorIndex.current).length}
             />
             <Line
               data={replay}
-              timeLength={COUNTDOWN_SECONDS}
+              timeLength={Math.min(COUNTDOWN_SECONDS, endTime)}
               className="w-5/6"
             />
           </div>

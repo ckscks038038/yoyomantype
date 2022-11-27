@@ -4,22 +4,30 @@ import useCountdownTimer from './useCountdownTimer';
 import useTypings from './useTypings';
 import { countErrors } from '../utils/helper';
 
-const NUMBER_OF_WORDS = 30;
-const COUNTDOWN_SECONDS = 10;
+const NUMBER_OF_WORDS = 5;
+const COUNTDOWN_SECONDS = 20;
 
 const useEngine = () => {
   const [state, setState] = useState('start');
   const { words, updateWords, setWords } = useWords(NUMBER_OF_WORDS);
   const { timeLeft, startCountdown, resetCountdown } =
     useCountdownTimer(COUNTDOWN_SECONDS);
-  const { typed, cursor, clearTyped, resetTotalTyped, totalTyped, replay } =
-    useTypings(state !== 'finish');
+  const {
+    typed,
+    cursor,
+    clearTyped,
+    resetTotalTyped,
+    totalTyped,
+    replay,
+    correctTyped,
+    errorIndex,
+  } = useTypings(state !== 'finish', words);
 
   const [errors, setErrors] = useState(0);
 
   const isStarting = state === 'start' && cursor > 0;
-  const areWordsFinished = cursor === words.length;
 
+  const areWordsFinished = correctTyped.current === words.length;
   const restart = useCallback(() => {
     resetCountdown();
     resetTotalTyped();
@@ -42,11 +50,12 @@ const useEngine = () => {
     }
   }, [isStarting, startCountdown]);
 
-  // when the time is up, we've finished
+  // 時間到、state===finish 就停止
   useEffect(() => {
-    if (!timeLeft && state === 'run') {
+    if ((!timeLeft && state === 'run') || areWordsFinished) {
       setState('finish');
       sumErrors();
+      resetCountdown();
     }
   }, [timeLeft, state, sumErrors]);
 
@@ -54,13 +63,13 @@ const useEngine = () => {
    * when the current words are all filled up,
    * we generate and show another set of words
    */
-  useEffect(() => {
-    if (areWordsFinished) {
-      sumErrors();
-      updateWords();
-      clearTyped();
-    }
-  }, [clearTyped, areWordsFinished, updateWords, sumErrors]);
+  // useEffect(() => {
+  //   if (areWordsFinished) {
+  //     sumErrors();
+  //     updateWords();
+  //     clearTyped();
+  //   }
+  // }, [clearTyped, areWordsFinished, updateWords, sumErrors]);
 
   return {
     state,
@@ -73,6 +82,7 @@ const useEngine = () => {
     totalTyped,
     replay,
     COUNTDOWN_SECONDS,
+    errorIndex,
   };
 };
 
