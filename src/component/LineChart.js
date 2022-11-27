@@ -65,7 +65,7 @@ const LineChart = ({ data }) => {
         tickSize: 5,
         tickPadding: 5,
         tickRotation: 0,
-        legend: 'character per minute',
+        legend: '',
         legendOffset: 37,
         legendPosition: 'middle',
       }}
@@ -74,7 +74,7 @@ const LineChart = ({ data }) => {
         tickSize: 5,
         tickPadding: 5,
         tickRotation: 0,
-        legend: 'count',
+        legend: 'character per minute',
         legendOffset: -55,
         legendPosition: 'middle',
       }}

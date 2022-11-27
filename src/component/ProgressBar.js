@@ -18,7 +18,9 @@ const ProgressBar = ({ progressPercentage }) => {
             ? 'bg-primary-300'
             : progressPercentage < 80
             ? 'bg-primary-400'
-            : 'bg-primary-500'
+            : progressPercentage < 90
+            ? 'bg-red-500'
+            : 'bg-red-600 '
         }`}>
         <span>*</span>
       </div>
