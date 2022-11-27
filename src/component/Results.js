@@ -12,7 +12,6 @@ const Results = ({
 }) => {
   const initial = { opacity: 0 };
   const animate = { opacity: 1 };
-  console.log('time', time);
   if (state !== 'finish') {
     return null;
   }
@@ -30,7 +29,7 @@ const Results = ({
       <motion.li
         initial={initial}
         animate={animate}
-        transition={{ duration: 0.3, delay: 0.5 }}>
+        transition={{ duration: 0.3, delay: 0.2 }}>
         cpm: {Math.trunc((total / time) * 60)}
       </motion.li>
       <motion.li
