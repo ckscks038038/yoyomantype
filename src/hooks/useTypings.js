@@ -80,7 +80,7 @@ const useTypings = (enabled, words) => {
           }
       }
     },
-    [enabled]
+    [enabled, words]
   );
 
   //重設replay儲存、打字紀錄、cursor位置

@@ -2,10 +2,9 @@ import { useCallback, useEffect, useState } from 'react';
 import useWords from './useWords';
 import useCountdownTimer from './useCountdownTimer';
 import useTypings from './useTypings';
-import { countErrors } from '../utils/helper';
 
-const NUMBER_OF_WORDS = 5;
-const COUNTDOWN_SECONDS = 20;
+const NUMBER_OF_WORDS = 15;
+const COUNTDOWN_SECONDS = 25;
 
 const useEngine = () => {
   const [state, setState] = useState('start');
@@ -23,8 +22,6 @@ const useEngine = () => {
     errorIndex,
   } = useTypings(state !== 'finish', words);
 
-  const [errors, setErrors] = useState(0);
-
   const isStarting = state === 'start' && cursor > 0;
 
   const areWordsFinished = correctTyped.current === words.length;
@@ -32,15 +29,10 @@ const useEngine = () => {
     resetCountdown();
     resetTotalTyped();
     setState('start');
-    setErrors(0);
+
     updateWords();
     clearTyped();
   }, [clearTyped, updateWords, resetCountdown, resetTotalTyped]);
-
-  const sumErrors = useCallback(() => {
-    const wordsReached = words.substring(0, Math.min(cursor, words.length));
-    setErrors((prevErrors) => prevErrors + countErrors(typed, wordsReached));
-  }, [typed, words, cursor]);
 
   // as soon the user starts typing the first letter, we start
   useEffect(() => {
@@ -54,10 +46,10 @@ const useEngine = () => {
   useEffect(() => {
     if ((!timeLeft && state === 'run') || areWordsFinished) {
       setState('finish');
-      sumErrors();
+
       resetCountdown();
     }
-  }, [timeLeft, state, sumErrors]);
+  }, [timeLeft, state]);
 
   /**
    * when the current words are all filled up,
@@ -76,7 +68,6 @@ const useEngine = () => {
     words,
     setWords,
     typed,
-    errors,
     restart,
     timeLeft,
     totalTyped,

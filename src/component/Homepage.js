@@ -26,6 +26,8 @@ function Homepage() {
 
   //結束時間可能會比COUNTDOWN_SECONDS更早。利用replay資料裡最後一個字跟第一個字，計算出提早的結束時間為何
   const endTime = (replay[replay.length - 1]?.time - replay[0]?.time) / 1000;
+
+  // console.log('errorindex', Object.keys(errorIndex.current));
   return (
     <>
       {state !== 'finish' ? (

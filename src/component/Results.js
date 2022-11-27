@@ -3,7 +3,6 @@ import { formatPercentage } from '../utils/helper';
 
 const Results = ({
   state,
-
   accuracyPercentage,
   total,
   className,
