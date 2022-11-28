@@ -211,7 +211,9 @@ const Gamepage = () => {
           </WordsContainer>
         </>
       ) : (
-        <div className="mt-80 text-xl text-slate-200 ">{`winner is ${winner}`}</div>
+        <>
+          <div className="mt-80 text-xl text-slate-200 ">{`winner is ${winner}`}</div>
+        </>
       )}
 
       {
@@ -256,31 +258,5 @@ const Gamepage = () => {
     </>
   );
 };
-
-// const ProgressBar = ({ progressPercentage }) => {
-//   return (
-//     <div className="h-2 w-6/12 rounded-2xl	 bg-gray-300">
-//       <div
-//         style={{
-//           width: `${progressPercentage}%`,
-//           textAlign: 'right',
-//           borderRadius: 'inherit',
-//         }}
-//         className={`h-full ${
-//           progressPercentage < 20
-//             ? 'bg-primary-100'
-//             : progressPercentage < 40
-//             ? 'bg-primary-200'
-//             : progressPercentage < 60
-//             ? 'bg-primary-300'
-//             : progressPercentage < 80
-//             ? 'bg-primary-400'
-//             : 'bg-primary-500'
-//         }`}>
-//         <span>{`${Math.trunc(progressPercentage)}%`}</span>
-//       </div>
-//     </div>
-//   );
-// };
 
 export default Gamepage;
