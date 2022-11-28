@@ -31,6 +31,7 @@ app.use('/api/' + API_VERSION, [
   require('./server/routes/words_route'),
   require('./server/routes/multiplayer_route'),
   require('./server/routes/user_route'),
+  require('./server/routes/record_route'),
 ]);
 
 // socket io

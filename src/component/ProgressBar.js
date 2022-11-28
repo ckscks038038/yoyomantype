@@ -2,7 +2,7 @@ import { FaCarSide } from 'react-icons/fa';
 
 const ProgressBar = ({ progressPercentage }) => {
   return (
-    <div className="h-2 w-6/12 rounded-2xl	 bg-gray-300">
+    <div className="w-12/12 h-2 rounded-2xl	 bg-gray-300">
       <div
         style={{
           width: `${progressPercentage}%`,

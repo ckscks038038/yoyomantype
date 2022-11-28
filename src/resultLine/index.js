@@ -2,7 +2,6 @@ import { Box } from '@mui/material';
 import LineChart from '../component/LineChart';
 
 const Line = ({ data, timeLength }) => {
-  //資料處理
   //0秒時打字總數設為0
   const finalLineChartData = [{ x: 0, y: 0 }];
   const arrWithoutNonCharData = data.filter((char) => {
