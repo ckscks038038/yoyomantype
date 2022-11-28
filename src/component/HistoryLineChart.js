@@ -1,11 +1,10 @@
 import { ResponsiveLine } from '@nivo/line';
 // import { mockData as data } from '../utils/mockData';
 
-const LineChart = ({ data }) => {
-  console.log('data', data);
+const HistoryLineChart = ({ data }) => {
   return (
     <ResponsiveLine
-      width={1300}
+      width={1500}
       height={400}
       data={data}
       theme={{
@@ -30,9 +29,15 @@ const LineChart = ({ data }) => {
               strokeWidth: 1,
             },
             text: {
-              fontSize: 13,
+              fontSize: 16,
               fill: '#94a3b8',
             },
+          },
+        },
+        grid: {
+          line: {
+            stroke: '#475569',
+            strokeWidth: 2,
           },
         },
 
@@ -80,9 +85,10 @@ const LineChart = ({ data }) => {
         legendPosition: 'middle',
       }}
       enableGridX={false}
-      enableGridY={false}
-      enableArea={true}
+      enableGridY={true}
+      enableArea={false}
       pointSize={10}
+      colors={{ scheme: 'yellow_orange_red' }}
       pointColor={{ theme: 'grid.line.stroke' }}
       pointBorderWidth={2}
       pointBorderColor={{ from: 'serieColor' }}
@@ -118,4 +124,4 @@ const LineChart = ({ data }) => {
   );
 };
 
-export default LineChart;
+export default HistoryLineChart;

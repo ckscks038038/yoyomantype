@@ -2,10 +2,10 @@ import { useCallback, useEffect, useState } from 'react';
 import useWords from './useWords';
 import useCountdownTimer from './useCountdownTimer';
 import useTypings from './useTypings';
-import { countErrors } from '../utils/helper';
+import { calculateAccuracyPercentage, InsertGameRecord } from '../utils/helper';
 
-const NUMBER_OF_WORDS = 5;
-const COUNTDOWN_SECONDS = 20;
+const NUMBER_OF_WORDS = 10;
+const COUNTDOWN_SECONDS = 15;
 
 const useEngine = () => {
   const [state, setState] = useState('start');
@@ -23,8 +23,6 @@ const useEngine = () => {
     errorIndex,
   } = useTypings(state !== 'finish', words);
 
-  const [errors, setErrors] = useState(0);
-
   const isStarting = state === 'start' && cursor > 0;
 
   const areWordsFinished = correctTyped.current === words.length;
@@ -32,15 +30,10 @@ const useEngine = () => {
     resetCountdown();
     resetTotalTyped();
     setState('start');
-    setErrors(0);
+
     updateWords();
     clearTyped();
   }, [clearTyped, updateWords, resetCountdown, resetTotalTyped]);
-
-  const sumErrors = useCallback(() => {
-    const wordsReached = words.substring(0, Math.min(cursor, words.length));
-    setErrors((prevErrors) => prevErrors + countErrors(typed, wordsReached));
-  }, [typed, words, cursor]);
 
   // as soon the user starts typing the first letter, we start
   useEffect(() => {
@@ -50,33 +43,41 @@ const useEngine = () => {
     }
   }, [isStarting, startCountdown]);
 
-  // 時間到、state===finish 就停止
-  useEffect(() => {
-    if ((!timeLeft && state === 'run') || areWordsFinished) {
-      setState('finish');
-      sumErrors();
-      resetCountdown();
-    }
-  }, [timeLeft, state, sumErrors]);
+  const endTime = (replay[replay.length - 1]?.time - replay[0]?.time) / 1000;
+  const time = Math.min(COUNTDOWN_SECONDS, endTime);
+  const getAcc = calculateAccuracyPercentage(
+    Object.keys(errorIndex.current).length,
+    totalTyped
+  );
+  const getCpm = Math.trunc((totalTyped / time) * 60);
 
-  /**
-   * when the current words are all filled up,
-   * we generate and show another set of words
-   */
-  // useEffect(() => {
-  //   if (areWordsFinished) {
-  //     sumErrors();
-  //     updateWords();
-  //     clearTyped();
-  //   }
-  // }, [clearTyped, areWordsFinished, updateWords, sumErrors]);
+  // 時間到就停止, 寫進資料庫
+  useEffect(() => {
+    if (!timeLeft && state === 'run') {
+      setState('finish');
+      resetCountdown();
+      InsertGameRecord({ acc: getAcc, cpm: getCpm, accounts_id: 66 });
+    }
+  }, [timeLeft, state, resetCountdown, getAcc, getCpm]);
+
+  // 打完字就停止, 寫進資料庫
+  useEffect(() => {
+    if (areWordsFinished) {
+      setState('finish');
+      resetCountdown();
+
+      InsertGameRecord({
+        acc: getAcc,
+        cpm: getCpm,
+      });
+    }
+  }, [areWordsFinished, resetCountdown, getAcc, getCpm]);
 
   return {
     state,
     words,
     setWords,
     typed,
-    errors,
     restart,
     timeLeft,
     totalTyped,

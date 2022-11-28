@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import CPM from '../line';
 import axios from 'axios';
+import ProfileLine from '../profileLine';
+import ProfileBar from '../profileBar';
 const Profile = () => {
   const navigate = useNavigate();
   const [name, setName] = useState();
@@ -10,7 +10,7 @@ const Profile = () => {
   const [joinedDate, setJoinedDate] = useState('0');
   const [cpm, setCpm] = useState('0');
   const [acc, setAcc] = useState('0');
-  const [typingData, setTypingData] = useState('0');
+  const [typingData, setTypingData] = useState([]);
   useEffect(() => {
     // 如果可以解jwtToken則render畫面
     if (localStorage.getItem('jwtToken')) {
@@ -25,10 +25,6 @@ const Profile = () => {
         };
         try {
           const response = await axios.get(profileUrl, { headers: headers });
-          const userId = response.data.data.id;
-
-          // 透過userId取得each cpm, acc, total test
-          console.log('profile', response.data.data.typingData);
           setName(response.data.data.name);
           setJoinedDate(response.data.data.created_on);
           setCpm(response.data.data.cpm);
@@ -54,7 +50,7 @@ const Profile = () => {
   return (
     <div className="mt-52">
       {name ? (
-        <div className="flex flex-col gap-28 text-gray-100">
+        <div className=" flex  flex-col gap-28 text-gray-100">
           <div className="top flex justify-between gap-20 rounded-xl bg-slate-900 p-3">
             <ProfileDiv title={'Name'} data={name} />
             <ProfileDiv
@@ -62,17 +58,25 @@ const Profile = () => {
               data={joinedDate.slice(0, joinedDate.indexOf('T'))}
             />
             <ProfileDiv title={'total tests'} data={totalTest} />
-            <ProfileDiv title={'average cpm'} data={cpm} />
-            <ProfileDiv title={'average accuracy'} data={acc} />
+            <ProfileDiv title={'average cpm'} data={Math.trunc(cpm)} />
+            <ProfileDiv
+              title={'average accuracy'}
+              data={`${Math.trunc(acc)}%`}
+            />
           </div>
-          <div className="body flex justify-between gap-20 border-2">
-            {/* <div>
-              {typingData.map((data) => {
-                console.log(data);
-                return <div key={`${data.cpm}_${data.date}`}>{data}</div>;
-              })}
+          <div className=" flex-col space-y-20">
+            <div>
+              <div className="w-2/5 rounded-xl  p-2 text-5xl font-black ">
+                History
+              </div>
+              <span className="ml-2 text-slate-400">
+                "History is not was, it is."{' '}
+              </span>
+              <ProfileLine data={typingData} />
             </div>
-            <div>chart 2{typingData}</div> */}
+            <div>
+              <ProfileBar data={typingData} />
+            </div>
           </div>
         </div>
       ) : null}

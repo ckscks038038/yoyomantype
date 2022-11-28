@@ -1,5 +1,12 @@
 import axios from 'axios';
 
+// 建立後端API連線
+const apiAdress = process.env.REACT_APP_API_URL;
+const apiClient = axios.create({
+  baseURL: apiAdress,
+  timeout: 30000,
+});
+
 export const formatPercentage = (percentage) => {
   return percentage.toFixed(0) + '%';
 };
@@ -36,6 +43,24 @@ export const checkRoomId = (roomId) => {
     return res.data.wordsArr;
   };
   fetchData();
+};
+
+export const InsertGameRecord = async ({ acc, cpm }) => {
+  if (localStorage.getItem('jwtToken')) {
+    const token = localStorage.getItem('jwtToken');
+    let headers = {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      Authorization: `Bearer ${token}`,
+    };
+    try {
+      return await apiClient.post('record', { acc, cpm }, { headers: headers });
+    } catch (err) {
+      return { error: true, err };
+    }
+  } else {
+    console.log('guest can not insert record into DB');
+  }
 };
 
 export const WordsContainer = ({ children }) => {

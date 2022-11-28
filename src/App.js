@@ -12,31 +12,25 @@ import logoImg from './image/logo.png';
 function App() {
   return (
     <>
-      <nav className=" absolute left-72 top-10 flex">
-        <Link to="/">
-          <img alt="logo" src={logoImg} width="350" className="mt-10 mr-10" />
-        </Link>
-        <Link to="/">
-          <KeyboardButton className={'mx-auto mt-10 text-slate-500'} />
-        </Link>
-        <Link to="/multiplayer">
-          <MultiPlayerButton className={'mx-auto mt-10 text-slate-500'} />
-        </Link>
-        <Link to="/account">
-          <AccountButton className={'mx-auto mt-10 text-slate-500'} />
-        </Link>
-        <Link className=" top-0 h-16 w-16">
-          <LogOutButton className={'mx-auto mt-10 text-slate-500'} />
-        </Link>
-      </nav>
-
-      <footer className="absolute inset-x-0 bottom-0 mb-12 flex justify-around text-slate-400">
-        <div>github</div>
-        <div>
-          <span>inspired by </span>
-          <span className="font-extrabold text-primary-400">monkeytype</span>
-        </div>
-      </footer>
+      <div>
+        <nav className=" absolute left-72 top-10 flex">
+          <Link to="/">
+            <img alt="logo" src={logoImg} width="350" className="mt-10 mr-10" />
+          </Link>
+          <Link to="/">
+            <KeyboardButton className={'mx-auto mt-10 text-slate-500'} />
+          </Link>
+          <Link to="/multiplayer">
+            <MultiPlayerButton className={'mx-auto mt-10 text-slate-500'} />
+          </Link>
+          <Link to="/account">
+            <AccountButton className={'mx-auto mt-10 text-slate-500'} />
+          </Link>
+          <Link className=" top-0 h-16 w-16">
+            <LogOutButton className={'mx-auto mt-10 text-slate-500'} />
+          </Link>
+        </nav>
+      </div>
       <Routes>
         <Route path="/" element={<Homepage />} />
         <Route path="/test" element={<h1>註冊登入</h1>} />
