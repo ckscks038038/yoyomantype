@@ -159,7 +159,9 @@ const Account = () => {
               placeholder=" password"
               className="my-4 rounded-sm"
             />
-            <input type="submit" id="submit" />
+            <button type="submit" id="submit">
+              submit
+            </button>
           </form>
           <form
             className="login flex flex-col rounded-sm"
@@ -196,7 +198,9 @@ const Account = () => {
               className="my-4 rounded-sm"
               value={signinData.password}
             />
-            <input type="submit" id="submit" />
+            <button type="submit" id="submit">
+              submit
+            </button>
           </form>
           <ToastContainer
             position="top-right"
