@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { TiChevronRight } from 'react-icons/ti';
+import { SiGamejolt } from 'react-icons/si';
 import { useNavigate } from 'react-router-dom';
 import webSocket from 'socket.io-client';
 import { BsPeople } from 'react-icons/bs';
@@ -66,7 +67,7 @@ const MultiplayerPage = () => {
           MULTIPLAYER MODE
         </h1>
 
-        <TiGroup className=" mb-10  h-60 w-60   text-slate-100" />
+        <SiGamejolt className=" mb-10  h-52 w-52   text-primary-400" />
         <div className="grid justify-items-center space-y-5">
           <input
             type="button"
