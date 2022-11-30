@@ -11,10 +11,10 @@ const pool = new Pool({
 pool
   .connect()
   .then(() => {
-    console.log('Database connected successfully');
+    console.log('timescaleDB connected successfully');
   })
   .catch(() => {
-    console.log('Database connection fail');
+    console.log('timescaleDB connection fail');
   });
 
 module.exports = pool;
