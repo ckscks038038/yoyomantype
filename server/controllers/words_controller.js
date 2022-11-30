@@ -9,6 +9,12 @@ const getWords = async (req, res) => {
   return res.send({ wordsArr });
 };
 
+const getsimilarWords = async (req, res) => {
+  const result = await Words.getsimilarWords();
+  return res.send(result);
+};
+
 module.exports = {
   getWords,
+  getsimilarWords,
 };
