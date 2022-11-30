@@ -10,7 +10,7 @@ import {
   CountdownTimer,
 } from '../utils/helper';
 import Line from '../resultLine';
-import Footer from './Footer';
+import WarningIcon from './WarningIcon';
 
 function Homepage() {
   const {

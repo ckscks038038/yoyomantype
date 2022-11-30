@@ -5,7 +5,7 @@ import useTypings from './useTypings';
 import { calculateAccuracyPercentage, InsertGameRecord } from '../utils/helper';
 
 const NUMBER_OF_WORDS = 10;
-const COUNTDOWN_SECONDS = 15;
+const COUNTDOWN_SECONDS = 17;
 
 const useEngine = () => {
   const [state, setState] = useState('start');

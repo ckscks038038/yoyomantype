@@ -25,6 +25,9 @@ const HistoryBarChart = ({ data }) => {
           opacity: 0.9,
         },
       ]}
+      config={{
+        displayModeBar: false, // this is the line that hides the bar.
+      }}
       layout={{
         width: 1500,
         height: 500,
@@ -32,7 +35,7 @@ const HistoryBarChart = ({ data }) => {
         plot_bgcolor: 'rgba(0,0,0,0)',
         xaxis: {
           title: {
-            text: 'cpm',
+            text: 'character per minute (cpm)',
             font: {
               family: 'Courier New, monospace',
               size: 20,
@@ -49,7 +52,7 @@ const HistoryBarChart = ({ data }) => {
         },
         yaxis: {
           title: {
-            text: 'test',
+            text: 'times',
             font: {
               family: 'Courier New, monospace',
               size: 20,

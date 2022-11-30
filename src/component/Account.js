@@ -154,7 +154,7 @@ const Account = () => {
               }}
               id="password"
               value={signupData.password}
-              type="text"
+              type="password"
               name="password"
               placeholder=" password"
               className="my-4 rounded-sm"
@@ -192,7 +192,7 @@ const Account = () => {
                 handleSignInChange(e);
               }}
               id="password"
-              type="text"
+              type="password"
               name="password"
               placeholder=" password"
               className="my-4 rounded-sm"

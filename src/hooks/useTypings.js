@@ -18,11 +18,13 @@ const useTypings = (enabled, words) => {
   const totalTyped = useRef(0);
   const correctTyped = useRef(0);
   const errorIndex = useRef({});
+
   const keydownHandler = useCallback(
     ({ key, code }) => {
       if (!enabled || !isKeyboardCodeAllowed(code)) {
         return;
       }
+
       /**
        * 紀錄按下字的時間以及按下的字為何,
        * 儲存資料到localstorage
@@ -100,6 +102,7 @@ const useTypings = (enabled, words) => {
   // attach the keydown event listener to record keystrokes
   useEffect(() => {
     window.addEventListener('keydown', keydownHandler);
+
     //Remove event listeners on cleanup
     return () => {
       window.removeEventListener('keydown', keydownHandler);
