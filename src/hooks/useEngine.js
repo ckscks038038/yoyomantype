@@ -2,10 +2,16 @@ import { useCallback, useEffect, useState, useRef } from 'react';
 import useWords from './useWords';
 import useCountdownTimer from './useCountdownTimer';
 import useTypings from './useTypings';
-import { calculateAccuracyPercentage, InsertGameRecord } from '../utils/helper';
+import {
+  calculateAccuracyPercentage,
+  consecutiveRanges,
+  FuzzySearch,
+  InsertGameRecord,
+  QueryString,
+} from '../utils/helper';
 
 const NUMBER_OF_WORDS = 10;
-const COUNTDOWN_SECONDS = 17;
+const COUNTDOWN_SECONDS = 2;
 
 const useEngine = () => {
   const [state, setState] = useState('start');
@@ -81,10 +87,41 @@ const useEngine = () => {
     if (areWordsFinished) {
       const wrongWordIndexArr = Object.keys(errorIndex.current);
 
-      const wrongWordResultArr = wrongWordIndexArr.map((i) => {
+      // 找出連續的range: {start:"index", start:"index"}
+      const consecutiveWrongChar = consecutiveRanges(wrongWordIndexArr);
+
+      // 拿連續range做queryString
+      if (consecutiveWrongChar[0]) {
+        consecutiveWrongChar.map((obj) => {
+          const [start, end] = [obj.start, obj.end];
+          const targetSection = words.slice(start, parseInt(end) + 1);
+
+          // 拿targetSection call getQueryStringWords撈資料
+        });
+      }
+      let wrongWordResultArr = wrongWordIndexArr.map((i) => {
         return indexReferToWord.current[i];
       });
-      console.log('wrongWordResultArr', wrongWordResultArr);
+
+      //移除重複出現的字
+      wrongWordResultArr = [...new Set(wrongWordResultArr)];
+
+      //取得推薦錯字 (fuzzy search)
+      const fetchFuzzyData = async () => {
+        const FuzzyWordsArrPromise = wrongWordResultArr.map((wrongWord) => {
+          return FuzzySearch({ word: wrongWord });
+        });
+        const FuzzyWordsArr = await Promise.all(FuzzyWordsArrPromise);
+        console.log(FuzzyWordsArr);
+        return FuzzyWordsArr;
+      };
+      const FuzzyWordsArr = fetchFuzzyData();
+      console.log('FuzzyWordsArr', FuzzyWordsArr);
+
+      const fetchQueryStringData = async (words) => {
+        // console.log('query', await QueryString({ word: 'el' }));
+      };
+      fetchQueryStringData();
     }
 
     //取完資料清空indexReferToWord.current

@@ -35,4 +35,22 @@ const getFuzzySearchWords = async (word) => {
   }
 };
 
-module.exports = { getWords, getFuzzySearchWords };
+const getQueryStringWords = async (word) => {
+  console.log(3, word);
+  try {
+    const { body } = await client.search({
+      index: 'word-data-set',
+      body: {
+        query: {
+          query_string: { default_field: 'word', query: `*${word}*` },
+        },
+        size: 10,
+      },
+    });
+    console.log(body);
+    return body.hits.hits;
+  } catch (err) {
+    console.log(err);
+  }
+};
+module.exports = { getWords, getFuzzySearchWords, getQueryStringWords };

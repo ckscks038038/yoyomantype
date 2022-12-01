@@ -18,7 +18,19 @@ const getFuzzySearchWords = async (req, res) => {
   return res.send(resultArr);
 };
 
+const getQueryStringWords = async (req, res) => {
+  const word = req.body.word;
+
+  const result = await Words.getQueryStringWords(word);
+
+  const resultArr = result.map((resultObj) => {
+    return resultObj['_source'].word;
+  });
+  return res.send(resultArr);
+};
+
 module.exports = {
   getWords,
   getFuzzySearchWords,
+  getQueryStringWords,
 };
