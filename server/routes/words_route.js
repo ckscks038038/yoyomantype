@@ -1,11 +1,11 @@
 const router = require('express').Router();
 const {
   getWords,
-  getsimilarWords,
+  getFuzzySearchWords,
 } = require('../controllers/words_controller');
 const { wrapAsync } = require('../utils/serverHelper');
 
 router.route('/words').post(wrapAsync(getWords));
-router.route('/espractice').get(wrapAsync(getsimilarWords));
+router.route('/espractice').get(wrapAsync(getFuzzySearchWords));
 
 module.exports = router;

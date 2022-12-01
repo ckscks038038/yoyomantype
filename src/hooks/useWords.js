@@ -5,7 +5,7 @@ import axios from 'axios';
 const generateWords = (count) => {
   let string = '';
   for (let i = 0; i < count; i++) {
-    const adj = faker.word.adjective({
+    const adj = faker.word.noun({
       length: { min: 5, max: 12 },
       strategy: 'closest',
     });

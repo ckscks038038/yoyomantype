@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useRef } from 'react';
 import useWords from './useWords';
 import useCountdownTimer from './useCountdownTimer';
 import useTypings from './useTypings';
@@ -25,7 +25,18 @@ const useEngine = () => {
 
   const isStarting = state === 'start' && cursor > 0;
 
-  const areWordsFinished = correctTyped.current === words.length;
+  const areWordsFinished =
+    correctTyped.current === words.length ||
+    cursor === words.length ||
+    !timeLeft;
+  const endTime = (replay[replay.length - 1]?.time - replay[0]?.time) / 1000;
+  const time = Math.min(COUNTDOWN_SECONDS, endTime);
+  const getAcc = calculateAccuracyPercentage(
+    Object.keys(errorIndex.current).length,
+    totalTyped
+  );
+  const getCpm = Math.trunc((totalTyped / time) * 60);
+  const indexReferToWord = useRef({});
   const restart = useCallback(() => {
     resetCountdown();
     resetTotalTyped();
@@ -42,14 +53,6 @@ const useEngine = () => {
       startCountdown();
     }
   }, [isStarting, startCountdown]);
-
-  const endTime = (replay[replay.length - 1]?.time - replay[0]?.time) / 1000;
-  const time = Math.min(COUNTDOWN_SECONDS, endTime);
-  const getAcc = calculateAccuracyPercentage(
-    Object.keys(errorIndex.current).length,
-    totalTyped
-  );
-  const getCpm = Math.trunc((totalTyped / time) * 60);
 
   // 時間到就停止, 寫進資料庫
   useEffect(() => {
@@ -73,6 +76,35 @@ const useEngine = () => {
     }
   }, [areWordsFinished, resetCountdown, getAcc, getCpm]);
 
+  //打完字, 計算有哪些錯字, 錯在什麼字
+  useEffect(() => {
+    if (areWordsFinished) {
+      const wrongWordIndexArr = Object.keys(errorIndex.current);
+
+      const wrongWordResultArr = wrongWordIndexArr.map((i) => {
+        return indexReferToWord.current[i];
+      });
+      console.log('wrongWordResultArr', wrongWordResultArr);
+    }
+
+    //取完資料清空indexReferToWord.current
+    indexReferToWord.current = {};
+  }, [areWordsFinished]);
+
+  // 分析words中每個字元屬於哪個字
+  useEffect(() => {
+    const getEachWord = words.split(' ');
+    const wordsArr = [...words];
+    let wordNum = 0;
+
+    wordsArr.forEach((char, index) => {
+      if (char !== ' ') {
+        indexReferToWord.current[`${index}`] = getEachWord[wordNum];
+      } else {
+        wordNum += 1;
+      }
+    });
+  }, [words]);
   return {
     state,
     words,

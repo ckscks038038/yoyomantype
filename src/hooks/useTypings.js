@@ -71,6 +71,9 @@ const useTypings = (enabled, words) => {
             if (key === words[totalTyped.current - 1]) {
               correctTyped.current += 1;
             } else {
+              if (words[totalTyped.current - 1] === ' ') {
+                break;
+              }
               //紀錄錯字的index以及發生次數
               //如果此index已經存在過錯=>新增1次紀錄
               if (errorIndex.current[totalTyped.current - 1]) {
