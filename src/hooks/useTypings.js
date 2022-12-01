@@ -6,7 +6,8 @@ const isKeyboardCodeAllowed = (code) => {
     code.startsWith('Key') ||
     code.startsWith('Digit') ||
     code === 'Backspace' ||
-    code === 'Space'
+    code === 'Space' ||
+    code === 'Minus'
   );
 };
 
