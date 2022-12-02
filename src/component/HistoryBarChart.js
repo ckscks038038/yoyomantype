@@ -1,8 +1,6 @@
 import Plot from 'react-plotly.js';
 
 const HistoryBarChart = ({ data }) => {
-  console.log(data);
-
   return (
     <Plot
       data={[

@@ -11,7 +11,7 @@ import {
 } from '../utils/helper';
 
 const NUMBER_OF_WORDS = 10;
-const COUNTDOWN_SECONDS = 2;
+const COUNTDOWN_SECONDS = 5;
 
 const useEngine = () => {
   const [state, setState] = useState('start');
@@ -116,7 +116,6 @@ const useEngine = () => {
         return FuzzyWordsArr;
       };
       const FuzzyWordsArr = fetchFuzzyData();
-      console.log('FuzzyWordsArr', FuzzyWordsArr);
 
       const fetchQueryStringData = async (words) => {
         // console.log('query', await QueryString({ word: 'el' }));

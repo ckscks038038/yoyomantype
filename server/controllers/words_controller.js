@@ -12,6 +12,7 @@ const getWords = async (req, res) => {
 const getFuzzySearchWords = async (req, res) => {
   const word = req.body.word;
   const result = await Words.getFuzzySearchWords(word);
+  console.log('result', result);
   const resultArr = result.map((resultObj) => {
     return resultObj['_source'].word;
   });

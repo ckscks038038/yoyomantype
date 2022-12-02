@@ -63,9 +63,10 @@ function Homepage() {
             />
           </div>
 
-          <div className="ml-32">
-            <div className=" mt-20 text-slate-500">Replay</div>
-            <Replay state={state} ans={words} replay={replay} />
+          <div className="ml-32 mt-20 ">
+            <div>
+              <Replay state={state} ans={words} replay={replay} />
+            </div>
           </div>
         </div>
       )}
