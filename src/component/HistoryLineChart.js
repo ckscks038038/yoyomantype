@@ -4,12 +4,19 @@ import { ResponsiveLine } from '@nivo/line';
 const HistoryLineChart = ({ data }) => {
   return (
     <ResponsiveLine
+      tooltip={(input) => {
+        return (
+          <div className="rounded-md bg-white p-1 font-black text-primary-500">{`cpm: ${Math.trunc(
+            input.point.data.y
+          )}`}</div>
+        );
+      }}
       width={1500}
       height={400}
       data={data}
       theme={{
         textColor: '#94a3b8',
-        fontSize: 15,
+        fontSize: 20,
         axis: {
           domain: {
             line: {
@@ -19,7 +26,7 @@ const HistoryLineChart = ({ data }) => {
           },
           legend: {
             text: {
-              fontSize: 15,
+              fontSize: 20,
               fill: '#94a3b8',
             },
           },
@@ -54,7 +61,7 @@ const HistoryLineChart = ({ data }) => {
           },
         },
       }}
-      margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
+      margin={{ top: 50, right: 110, bottom: 50, left: 80 }}
       xScale={{ type: 'point' }}
       yScale={{
         type: 'linear',
@@ -78,10 +85,10 @@ const HistoryLineChart = ({ data }) => {
       axisLeft={{
         orient: 'left',
         tickSize: 5,
-        tickPadding: 5,
+        tickPadding: 0,
         tickRotation: 0,
-        legend: 'character per minute',
-        legendOffset: -55,
+        legend: 'character per minute (cpm)',
+        legendOffset: -70,
         legendPosition: 'middle',
       }}
       enableGridX={false}
@@ -106,18 +113,9 @@ const HistoryLineChart = ({ data }) => {
           itemWidth: 80,
           itemHeight: 20,
           itemOpacity: 0.75,
-          symbolSize: 12,
+          symbolSize: 0,
           symbolShape: 'circle',
           symbolBorderColor: 'rgba(0, 0, 0, .5)',
-          effects: [
-            {
-              on: 'hover',
-              style: {
-                itemBackground: 'rgba(0, 0, 0, .03)',
-                itemOpacity: 1,
-              },
-            },
-          ],
         },
       ]}
     />

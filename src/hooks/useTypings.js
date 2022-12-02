@@ -6,7 +6,8 @@ const isKeyboardCodeAllowed = (code) => {
     code.startsWith('Key') ||
     code.startsWith('Digit') ||
     code === 'Backspace' ||
-    code === 'Space'
+    code === 'Space' ||
+    code === 'Minus'
   );
 };
 
@@ -18,11 +19,13 @@ const useTypings = (enabled, words) => {
   const totalTyped = useRef(0);
   const correctTyped = useRef(0);
   const errorIndex = useRef({});
+
   const keydownHandler = useCallback(
     ({ key, code }) => {
       if (!enabled || !isKeyboardCodeAllowed(code)) {
         return;
       }
+
       /**
        * 紀錄按下字的時間以及按下的字為何,
        * 儲存資料到localstorage
@@ -68,6 +71,9 @@ const useTypings = (enabled, words) => {
             if (key === words[totalTyped.current - 1]) {
               correctTyped.current += 1;
             } else {
+              if (words[totalTyped.current - 1] === ' ') {
+                break;
+              }
               //紀錄錯字的index以及發生次數
               //如果此index已經存在過錯=>新增1次紀錄
               if (errorIndex.current[totalTyped.current - 1]) {
@@ -100,6 +106,7 @@ const useTypings = (enabled, words) => {
   // attach the keydown event listener to record keystrokes
   useEffect(() => {
     window.addEventListener('keydown', keydownHandler);
+
     //Remove event listeners on cleanup
     return () => {
       window.removeEventListener('keydown', keydownHandler);

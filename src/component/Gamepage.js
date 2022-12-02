@@ -173,7 +173,7 @@ const Gamepage = () => {
           <div className="font-bold text-gray-300">GAME STATE:{state}</div>
           <h2
             className={`mt-2 w-3/6 rounded-xl text-3xl font-extrabold text-red-300`}>
-            Time left: {timeLeft}
+            Count down: {timeLeft}
           </h2>
           <div className="mt-6">
             {users.map((user) => {

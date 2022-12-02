@@ -9,12 +9,29 @@ const getWords = async (req, res) => {
   return res.send({ wordsArr });
 };
 
-const getsimilarWords = async (req, res) => {
-  const result = await Words.getsimilarWords();
-  return res.send(result);
+const getFuzzySearchWords = async (req, res) => {
+  const word = req.body.word;
+  const result = await Words.getFuzzySearchWords(word);
+  console.log('result', result);
+  const resultArr = result.map((resultObj) => {
+    return resultObj['_source'].word;
+  });
+  return res.send(resultArr);
+};
+
+const getQueryStringWords = async (req, res) => {
+  const word = req.body.word;
+
+  const result = await Words.getQueryStringWords(word);
+
+  const resultArr = result.map((resultObj) => {
+    return resultObj['_source'].word;
+  });
+  return res.send(resultArr);
 };
 
 module.exports = {
   getWords,
-  getsimilarWords,
+  getFuzzySearchWords,
+  getQueryStringWords,
 };

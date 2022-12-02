@@ -1,11 +1,17 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useRef } from 'react';
 import useWords from './useWords';
 import useCountdownTimer from './useCountdownTimer';
 import useTypings from './useTypings';
-import { calculateAccuracyPercentage, InsertGameRecord } from '../utils/helper';
+import {
+  calculateAccuracyPercentage,
+  consecutiveRanges,
+  FuzzySearch,
+  InsertGameRecord,
+  QueryString,
+} from '../utils/helper';
 
 const NUMBER_OF_WORDS = 10;
-const COUNTDOWN_SECONDS = 15;
+const COUNTDOWN_SECONDS = 5;
 
 const useEngine = () => {
   const [state, setState] = useState('start');
@@ -25,7 +31,18 @@ const useEngine = () => {
 
   const isStarting = state === 'start' && cursor > 0;
 
-  const areWordsFinished = correctTyped.current === words.length;
+  const areWordsFinished =
+    correctTyped.current === words.length ||
+    cursor === words.length ||
+    !timeLeft;
+  const endTime = (replay[replay.length - 1]?.time - replay[0]?.time) / 1000;
+  const time = Math.min(COUNTDOWN_SECONDS, endTime);
+  const getAcc = calculateAccuracyPercentage(
+    Object.keys(errorIndex.current).length,
+    totalTyped
+  );
+  const getCpm = Math.trunc((totalTyped / time) * 60);
+  const indexReferToWord = useRef({});
   const restart = useCallback(() => {
     resetCountdown();
     resetTotalTyped();
@@ -42,14 +59,6 @@ const useEngine = () => {
       startCountdown();
     }
   }, [isStarting, startCountdown]);
-
-  const endTime = (replay[replay.length - 1]?.time - replay[0]?.time) / 1000;
-  const time = Math.min(COUNTDOWN_SECONDS, endTime);
-  const getAcc = calculateAccuracyPercentage(
-    Object.keys(errorIndex.current).length,
-    totalTyped
-  );
-  const getCpm = Math.trunc((totalTyped / time) * 60);
 
   // 時間到就停止, 寫進資料庫
   useEffect(() => {
@@ -73,6 +82,65 @@ const useEngine = () => {
     }
   }, [areWordsFinished, resetCountdown, getAcc, getCpm]);
 
+  //打完字, 計算有哪些錯字, 錯在什麼字
+  useEffect(() => {
+    if (areWordsFinished) {
+      const wrongWordIndexArr = Object.keys(errorIndex.current);
+
+      // 找出連續的range: {start:"index", start:"index"}
+      const consecutiveWrongChar = consecutiveRanges(wrongWordIndexArr);
+
+      // 拿連續range做queryString
+      if (consecutiveWrongChar[0]) {
+        consecutiveWrongChar.map((obj) => {
+          const [start, end] = [obj.start, obj.end];
+          const targetSection = words.slice(start, parseInt(end) + 1);
+          console.log('targetSection', targetSection);
+          // 拿targetSection call getQueryStringWords撈資料
+        });
+      }
+      let wrongWordResultArr = wrongWordIndexArr.map((i) => {
+        return indexReferToWord.current[i];
+      });
+
+      //移除重複出現的字
+      wrongWordResultArr = [...new Set(wrongWordResultArr)];
+
+      //取得推薦錯字 (fuzzy search)
+      const fetchFuzzyData = async () => {
+        const FuzzyWordsArrPromise = wrongWordResultArr.map((wrongWord) => {
+          return FuzzySearch({ word: wrongWord });
+        });
+        const FuzzyWordsArr = await Promise.all(FuzzyWordsArrPromise);
+        console.log(FuzzyWordsArr);
+        return FuzzyWordsArr;
+      };
+      const FuzzyWordsArr = fetchFuzzyData();
+
+      const fetchQueryStringData = async (words) => {
+        // console.log('query', await QueryString({ word: 'el' }));
+      };
+      fetchQueryStringData();
+    }
+
+    //取完資料清空indexReferToWord.current
+    indexReferToWord.current = {};
+  }, [areWordsFinished]);
+
+  // 分析words中每個字元屬於哪個字
+  useEffect(() => {
+    const getEachWord = words.split(' ');
+    const wordsArr = [...words];
+    let wordNum = 0;
+
+    wordsArr.forEach((char, index) => {
+      if (char !== ' ') {
+        indexReferToWord.current[`${index}`] = getEachWord[wordNum];
+      } else {
+        wordNum += 1;
+      }
+    });
+  }, [words]);
   return {
     state,
     words,

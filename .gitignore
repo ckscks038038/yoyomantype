@@ -11,6 +11,11 @@
 # production
 /build
 
+#data set
+/words-long.json
+/server/utils/Mieliestronk-English-words.json
+/server/utils/words.json
+
 # misc
 
 .DS_Store

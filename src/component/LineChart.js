@@ -2,7 +2,6 @@ import { ResponsiveLine } from '@nivo/line';
 // import { mockData as data } from '../utils/mockData';
 
 const LineChart = ({ data }) => {
-  console.log('data', data);
   return (
     <ResponsiveLine
       width={1300}

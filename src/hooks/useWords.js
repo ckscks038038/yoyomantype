@@ -3,7 +3,17 @@ import { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
 
 const generateWords = (count) => {
-  return faker.random.words(count).toLowerCase();
+  let string = '';
+  for (let i = 0; i < count; i++) {
+    const adj = faker.word.noun({
+      length: { min: 5, max: 12 },
+      strategy: 'closest',
+    });
+    i + 1 === count ? (string += `${adj}`) : (string += `${adj} `);
+  }
+  // const w = faker.random.words(count).toLowerCase();
+
+  return string;
 };
 
 const asyncGetwords = (count) => {
@@ -27,7 +37,6 @@ const useWords = (count) => {
   const [words, setWords] = useState(generateWords(count));
 
   const updateWords = useCallback(() => {
-    console.log('here!!! updateWords');
     setWords(generateWords(count));
   }, [count]);
 

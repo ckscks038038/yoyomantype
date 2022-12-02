@@ -15,22 +15,42 @@ const getWords = async (wordsNum) => {
   }
 };
 
-const getsimilarWords = async () => {
+const getFuzzySearchWords = async (word) => {
   try {
     const { body } = await client.search({
       index: 'word-data-set',
       body: {
         query: {
-          match_all: {},
+          fuzzy: {
+            word: {
+              value: word,
+            },
+          },
         },
       },
     });
-    console.log('len: ', body);
-    return body;
+    return body.hits.hits;
   } catch (err) {
-    console.log('GG');
     console.log(err);
   }
 };
 
-module.exports = { getWords, getsimilarWords };
+const getQueryStringWords = async (word) => {
+  console.log(3, word);
+  try {
+    const { body } = await client.search({
+      index: 'word-data-set',
+      body: {
+        query: {
+          query_string: { default_field: 'word', query: `*${word}*` },
+        },
+        size: 10,
+      },
+    });
+    console.log(body);
+    return body.hits.hits;
+  } catch (err) {
+    console.log(err);
+  }
+};
+module.exports = { getWords, getFuzzySearchWords, getQueryStringWords };
