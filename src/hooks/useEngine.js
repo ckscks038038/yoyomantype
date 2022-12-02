@@ -95,7 +95,7 @@ const useEngine = () => {
         consecutiveWrongChar.map((obj) => {
           const [start, end] = [obj.start, obj.end];
           const targetSection = words.slice(start, parseInt(end) + 1);
-
+          console.log('targetSection', targetSection);
           // 拿targetSection call getQueryStringWords撈資料
         });
       }
