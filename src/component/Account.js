@@ -1,6 +1,6 @@
-import { CgSpinner } from 'react-icons/cg';
-import { FaCheck } from 'react-icons/fa';
-import { FiLogIn } from 'react-icons/fi';
+// import { CgSpinner } from 'react-icons/cg';
+// import { FaCheck } from 'react-icons/fa';
+// import { FiLogIn } from 'react-icons/fi';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';

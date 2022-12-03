@@ -1,6 +1,6 @@
 import { BsFillPlayFill, BsPauseFill } from 'react-icons/bs';
 
-const ReplayButton = ({ showButton, isPlaying, replayHandler }) => {
+const ReplayButton = ({ isPlaying, replayHandler }) => {
   return (
     <>
       <button onClick={replayHandler}>

@@ -67,7 +67,7 @@ const Replay = ({ state, ans, replay }) => {
     return () => {
       clearTimeout(timeoutId);
     };
-  }, [currentWord, replay, state, playing]);
+  }, [currentWord, replay, state, playing, replayLength]);
 
   const typedCharacters = currentWord.split('');
 

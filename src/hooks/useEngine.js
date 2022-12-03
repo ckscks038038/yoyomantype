@@ -9,13 +9,15 @@ import {
   InsertGameRecord,
   QueryString,
 } from '../utils/helper';
+import { toast } from 'react-toastify';
 
 const NUMBER_OF_WORDS = 10;
-const COUNTDOWN_SECONDS = 5;
+const COUNTDOWN_SECONDS = 15;
 
 const useEngine = () => {
   const [state, setState] = useState('start');
   const { words, updateWords, setWords } = useWords(NUMBER_OF_WORDS);
+  let testArr = useRef([]);
   const { timeLeft, startCountdown, resetCountdown } =
     useCountdownTimer(COUNTDOWN_SECONDS);
   const {
@@ -52,11 +54,77 @@ const useEngine = () => {
     clearTyped();
   }, [clearTyped, updateWords, resetCountdown, resetTotalTyped]);
 
-  // as soon the user starts typing the first letter, we start
+  const updatePracticeWords = useCallback(() => {
+    let string = '';
+    const wordsLength = testArr.current.length;
+
+    // 字長度不超過NUMBER_OF_WORDS
+    // 超過就隨機選取NUMBER_OF_WORDS個出來
+    if (wordsLength <= NUMBER_OF_WORDS) {
+      testArr.current.forEach((word, index) => {
+        string += index === wordsLength ? word : word + ' ';
+      });
+    } else {
+      for (let index = 1; index <= NUMBER_OF_WORDS; index += 1) {
+        // generate random number within wordsLength
+        const randomNum = Math.floor(Math.random() * NUMBER_OF_WORDS);
+
+        // append it to string
+        string +=
+          index === NUMBER_OF_WORDS
+            ? testArr.current[randomNum]
+            : testArr.current[randomNum] + ' ';
+      }
+    }
+
+    setWords(string);
+  }, [setWords]);
+
+  const restartPractice = useCallback(() => {
+    resetCountdown();
+    resetTotalTyped();
+    setState('start');
+
+    testArr.current[0] ? updatePracticeWords() : updateWords();
+    testArr.current[0]
+      ? toast.success('🦄 Practice makes perfect!', {
+          position: 'top-right',
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'dark',
+          toastId: "Room doesn't exist.",
+        })
+      : toast.error('🦄 You are perfect typer!', {
+          position: 'top-right',
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'dark',
+          toastId: "Room doesn't exist.",
+        });
+    clearTyped();
+  }, [
+    clearTyped,
+    updatePracticeWords,
+    resetCountdown,
+    resetTotalTyped,
+    updateWords,
+  ]);
+
+  // 開始時啟動倒數
   useEffect(() => {
     if (isStarting) {
       setState('run');
       startCountdown();
+
+      testArr.current = [];
     }
   }, [isStarting, startCountdown]);
 
@@ -90,42 +158,62 @@ const useEngine = () => {
       // 找出連續的range: {start:"index", start:"index"}
       const consecutiveWrongChar = consecutiveRanges(wrongWordIndexArr);
 
-      // 拿連續range做queryString
+      // 1. queryString
       if (consecutiveWrongChar[0]) {
-        consecutiveWrongChar.map((obj) => {
+        let wrongCharArr = consecutiveWrongChar.map((obj) => {
           const [start, end] = [obj.start, obj.end];
           const targetSection = words.slice(start, parseInt(end) + 1);
-          console.log('targetSection', targetSection);
-          // 拿targetSection call getQueryStringWords撈資料
+          return targetSection;
         });
+        // 拿targetSection call getQueryStringWords撈資料
+        const fetchQueryStringData = async (wrongCharArr) => {
+          const wrongCharArrPromise = wrongCharArr.map((charSection) => {
+            return QueryString({ word: charSection });
+          });
+          wrongCharArr = await Promise.all(wrongCharArrPromise);
+
+          const wrongWords = [];
+          wrongCharArr.forEach((arr) => {
+            arr.forEach((element) => {
+              wrongWords.push(element);
+            });
+          });
+
+          testArr.current = [...testArr.current, ...wrongWords];
+          // console.log('錯字推薦的testArr', testArr.current);
+          // console.log('錯字推薦', wrongWords);
+        };
+        fetchQueryStringData(wrongCharArr);
       }
+
+      // 2. 模糊搜尋
       let wrongWordResultArr = wrongWordIndexArr.map((i) => {
         return indexReferToWord.current[i];
       });
 
-      //移除重複出現的字
       wrongWordResultArr = [...new Set(wrongWordResultArr)];
 
-      //取得推薦錯字 (fuzzy search)
       const fetchFuzzyData = async () => {
         const FuzzyWordsArrPromise = wrongWordResultArr.map((wrongWord) => {
           return FuzzySearch({ word: wrongWord });
         });
         const FuzzyWordsArr = await Promise.all(FuzzyWordsArrPromise);
-        console.log(FuzzyWordsArr);
-        return FuzzyWordsArr;
+        const wrongWords = [];
+        FuzzyWordsArr.forEach((arr) => {
+          arr.forEach((element) => {
+            wrongWords.push(element);
+          });
+        });
+        // console.log('模糊推薦', wrongWords);
+        // console.log('模糊推薦的testArr', testArr.current);
+        testArr.current = [...testArr.current, ...wrongWords];
       };
-      const FuzzyWordsArr = fetchFuzzyData();
-
-      const fetchQueryStringData = async (words) => {
-        // console.log('query', await QueryString({ word: 'el' }));
-      };
-      fetchQueryStringData();
+      fetchFuzzyData();
     }
 
     //取完資料清空indexReferToWord.current
-    indexReferToWord.current = {};
-  }, [areWordsFinished]);
+    // indexReferToWord.current = {};
+  }, [areWordsFinished, errorIndex, words]);
 
   // 分析words中每個字元屬於哪個字
   useEffect(() => {
@@ -152,6 +240,7 @@ const useEngine = () => {
     replay,
     COUNTDOWN_SECONDS,
     errorIndex,
+    restartPractice,
   };
 };
 
