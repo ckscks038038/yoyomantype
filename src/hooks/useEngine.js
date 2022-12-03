@@ -89,7 +89,7 @@ const useEngine = () => {
     testArr.current[0]
       ? toast.success('🦄 Practice makes perfect!', {
           position: 'top-right',
-          autoClose: 1000,
+          autoClose: 2000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
@@ -98,9 +98,9 @@ const useEngine = () => {
           theme: 'dark',
           toastId: "Room doesn't exist.",
         })
-      : toast.error('🦄 You are perfect typer!', {
+      : toast.success('🦄 You are perfect typer!', {
           position: 'top-right',
-          autoClose: 1000,
+          autoClose: 2000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
