@@ -133,7 +133,7 @@ const useEngine = () => {
     if (!timeLeft && state === 'run') {
       setState('finish');
       resetCountdown();
-      InsertGameRecord({ acc: getAcc, cpm: getCpm, accounts_id: 66 });
+      InsertGameRecord({ acc: getAcc, cpm: getCpm });
     }
   }, [timeLeft, state, resetCountdown, getAcc, getCpm]);
 

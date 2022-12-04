@@ -108,6 +108,11 @@ const getUserTyingData = async (id) => {
   return typingData.rows;
 };
 
+const updateLeaderboard = async () => {
+  //取得目前排行榜的值
+  //比對前五名是否需要更新
+  //if true, 更新資料庫
+};
 module.exports = {
   signUp,
   nativeSignIn,
