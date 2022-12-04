@@ -19,7 +19,6 @@ const useTypings = (enabled, words) => {
   const totalTyped = useRef(0);
   const correctTyped = useRef(0);
   const errorIndex = useRef({});
-
   const keydownHandler = useCallback(
     ({ key, code }) => {
       if (!enabled || !isKeyboardCodeAllowed(code)) {

@@ -67,7 +67,7 @@ const Replay = ({ state, ans, replay }) => {
     return () => {
       clearTimeout(timeoutId);
     };
-  }, [currentWord, replay, state, playing]);
+  }, [currentWord, replay, state, playing, replayLength]);
 
   const typedCharacters = currentWord.split('');
 
@@ -77,7 +77,7 @@ const Replay = ({ state, ans, replay }) => {
     return (
       <>
         <div className="flex  space-x-0.5">
-          <div className="  text-slate-500">Replay</div>
+          <div className=" text-2xl text-slate-500">Replay</div>
           {showButton ? (
             <ReplayButton
               showButton={showButton}
@@ -87,7 +87,7 @@ const Replay = ({ state, ans, replay }) => {
           ) : null}
         </div>
 
-        <div className={'  w-1/2 break-all'}>
+        <div className={'w-1/2  break-all text-xl'}>
           {typedCharacters.map((char, index) => {
             return (
               <Character

@@ -1,6 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { useCallback, useEffect, useState } from 'react';
-import axios from 'axios';
+import { useCallback, useState } from 'react';
 
 const generateWords = (count) => {
   let string = '';
@@ -14,23 +13,6 @@ const generateWords = (count) => {
   // const w = faker.random.words(count).toLowerCase();
 
   return string;
-};
-
-const asyncGetwords = (count) => {
-  const fetchData = async () => {
-    const res = await axios.post('http://localhost:3300/api/1.0/words', {
-      wordsNum: count,
-    });
-    // console.log(res.data.wordsArr);
-    const wordStr = '';
-    res.data.wordsArr.forEach((word) => {
-      wordStr += word + ' ';
-    });
-    // console.log('dataStr', res.data.wordsStr);
-    // setWords(res.data);
-    return res.data.wordsArr;
-  };
-  fetchData();
 };
 
 const useWords = (count) => {

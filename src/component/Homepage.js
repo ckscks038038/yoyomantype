@@ -10,8 +10,9 @@ import {
   CountdownTimer,
 } from '../utils/helper';
 import Line from '../resultLine';
-import WarningIcon from './WarningIcon';
-
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import PracticeWordButton from './PracticeWordButton';
 function Homepage() {
   const {
     state,
@@ -23,11 +24,16 @@ function Homepage() {
     replay,
     COUNTDOWN_SECONDS,
     errorIndex,
+    restartPractice,
   } = useEngine();
 
   //結束時間可能會比COUNTDOWN_SECONDS更早。利用replay資料裡最後一個字跟第一個字，計算出提早的結束時間為何
   const endTime = (replay[replay.length - 1]?.time - replay[0]?.time) / 1000;
-
+  function handleKeyPress() {
+    console.log('You pressed a key.');
+  }
+  if (state === 'finish') {
+  }
   return (
     <>
       {state !== 'finish' ? (
@@ -70,9 +76,22 @@ function Homepage() {
           </div>
         </div>
       )}
-      <RestartButton
-        className={'mb- mx-auto mt-10 text-slate-500'}
-        handleRestart={restart}
+      <div className="mx-auto mt-20 flex justify-center gap-x-12 text-slate-500">
+        <PracticeWordButton handleRestart={restartPractice} />
+        <RestartButton className="" handleRestart={restart} />
+      </div>
+
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
       />
     </>
   );
