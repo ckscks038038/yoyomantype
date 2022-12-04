@@ -61,7 +61,7 @@ const HistoryLineChart = ({ data }) => {
           },
         },
       }}
-      margin={{ top: 50, right: 110, bottom: 50, left: 80 }}
+      margin={{ top: 50, right: 110, bottom: 62, left: 80 }}
       xScale={{ type: 'point' }}
       yScale={{
         type: 'linear',
@@ -78,8 +78,8 @@ const HistoryLineChart = ({ data }) => {
         tickSize: 5,
         tickPadding: 5,
         tickRotation: 0,
-        legend: '',
-        legendOffset: 37,
+        legend: 'Date',
+        legendOffset: 45,
         legendPosition: 'middle',
       }}
       axisLeft={{
@@ -112,7 +112,7 @@ const HistoryLineChart = ({ data }) => {
           itemDirection: 'left-to-right',
           itemWidth: 80,
           itemHeight: 20,
-          itemOpacity: 0.75,
+          itemOpacity: 0.25,
           symbolSize: 0,
           symbolShape: 'circle',
           symbolBorderColor: 'rgba(0, 0, 0, .5)',

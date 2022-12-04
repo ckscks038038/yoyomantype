@@ -16,13 +16,13 @@ const Results = ({
   }
   return (
     <motion.ul
-      className={`flex flex-col items-center space-y-10 
+      className={`flex flex-col items-center space-y-10 text-xl 
 			text-primary-400 ${className}`}>
       <motion.li
         initial={initial}
         animate={animate}
         transition={{ duration: 0.3 }}
-        className="text-xl font-semibold">
+        className="text-2xl font-semibold">
         Results
       </motion.li>
       <motion.li
