@@ -1,7 +1,8 @@
 const { Client } = require('@elastic/elasticsearch');
+require('dotenv').config;
 
 const client = new Client({
-  node: 'http://35.73.111.103:9200/',
+  node: process.env.ELASTIC_SEARCH_URL,
 });
 client.ping(function (error) {
   if (error) {
