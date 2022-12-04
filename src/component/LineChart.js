@@ -72,7 +72,7 @@ const LineChart = ({ data }) => {
         tickSize: 5,
         tickPadding: 5,
         tickRotation: 0,
-        legend: 'Second',
+        legend: 'Time(second)',
         legendOffset: 40,
         legendPosition: 'middle',
       }}
