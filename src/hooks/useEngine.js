@@ -11,8 +11,8 @@ import {
 } from '../utils/helper';
 import { toast } from 'react-toastify';
 
-const NUMBER_OF_WORDS = 10;
-const COUNTDOWN_SECONDS = 15;
+const NUMBER_OF_WORDS = 9;
+const COUNTDOWN_SECONDS = 12;
 
 const useEngine = () => {
   const [state, setState] = useState('start');
