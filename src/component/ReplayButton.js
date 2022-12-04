@@ -5,9 +5,9 @@ const ReplayButton = ({ isPlaying, replayHandler }) => {
     <>
       <button onClick={replayHandler}>
         {isPlaying ? (
-          <BsPauseFill className="text-slate-400" />
+          <BsPauseFill className="text-3xl text-slate-400" />
         ) : (
-          <BsFillPlayFill className="text-slate-400" />
+          <BsFillPlayFill className="text-3xl text-slate-400" />
         )}
       </button>
     </>
