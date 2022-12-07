@@ -1,11 +1,5 @@
 import MultiPlayerButton from './component/MultiPlayerButton';
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Link,
-  Navigate,
-} from 'react-router-dom';
+import { Routes, Route, Link, Navigate } from 'react-router-dom';
 import MultiplayerPage from './component/MultiplayerPage';
 import Homepage from './component/Homepage';
 import KeyboardButton from './component/KeyboardButton';
@@ -39,7 +33,6 @@ function App() {
       </div>
       <Routes>
         <Route path="/" element={<Homepage />} />
-        <Route path="/test" element={<h1>註冊登入</h1>} />
         <Route path="/multiplayer" element={<MultiplayerPage />} />
         <Route path="/multiplayer/:id" element={<Gamepage />} />
         <Route path="/account" element={<Account />} />

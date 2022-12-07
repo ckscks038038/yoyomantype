@@ -1,50 +1,28 @@
-const express = require('express');
-const app = express();
-const cors = require('cors');
 const http = require('http');
-const server = http.createServer(app);
+const httpServer = require('./httpServer');
+const server = http.createServer(httpServer);
 const { Server } = require('socket.io');
 const io = new Server(server, { cors: { origin: '*' } });
 require('dotenv').config();
-const { PORT, API_VERSION } = process.env;
-const port = PORT;
-const {
-  JoinRoomToMap,
-  createNewRoomToMap,
-  checkRoomIdExistInMap,
-  saveArticleToMap,
-  getArticleFromMap,
-  changeStartStateToMap,
-  changeFinishStateToMap,
-  getUsersProgressInMap,
-  updateUsersProgressToMap,
-  removeUserFromRoomInMap,
-  findUserInRoomInMap,
-} = require('./server/utils/roomMap');
+const { PORT } = process.env;
 
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-// API routes
-app.use('/api/' + API_VERSION, [
-  require('./server/routes/words_route'),
-  require('./server/routes/multiplayer_route'),
-  require('./server/routes/user_route'),
-  require('./server/routes/record_route'),
-]);
+const Room = require('./server/utils/roomMap');
 
 // socket io
 io.on('connection', (socket) => {
   //創建新房間
   socket.on('create room', (roomId) => {
-    createNewRoomToMap({ roomId: roomId, ownerId: socket.id, socket: socket });
+    Room.createNewRoomToMap({
+      roomId: roomId,
+      ownerId: socket.id,
+      socket: socket,
+    });
     socket.join(roomId);
   });
 
   //確認存在房間
   socket.on('check room', (roomId) => {
-    if (checkRoomIdExistInMap(roomId)) {
+    if (Room.checkRoomIdExistInMap(roomId)) {
       console.log(`檢查結果:存在${roomId}`);
       socket.emit('join auth', { auth: true });
     } else {
@@ -55,12 +33,12 @@ io.on('connection', (socket) => {
 
   //加入房間
   socket.on('join room', (roomId) => {
-    if (checkRoomIdExistInMap(roomId)) {
+    if (Room.checkRoomIdExistInMap(roomId)) {
       socket.join(roomId);
-      JoinRoomToMap({ roomId: roomId, userId: socket.id, socket: socket });
+      Room.JoinRoomToMap({ roomId: roomId, userId: socket.id, socket: socket });
 
       //回傳文章給guest
-      socket.emit('get article', getArticleFromMap(roomId));
+      socket.emit('get article', Room.getArticleFromMap(roomId));
     } else {
       console.log(`不存在roomId ${roomId}`);
     }
@@ -68,10 +46,10 @@ io.on('connection', (socket) => {
 
   //開始遊戲
   socket.on('start game', (roomId) => {
-    changeStartStateToMap(roomId);
+    Room.changeStartStateToMap(roomId);
     //回傳文章給guest
 
-    socket.emit('get article', getArticleFromMap(roomId));
+    socket.emit('get article', Room.getArticleFromMap(roomId));
     //broadcast給房主修改遊戲狀態(state)
     io.to(roomId).emit('run state');
   });
@@ -84,7 +62,7 @@ io.on('connection', (socket) => {
   //結束遊戲
   socket.on('finish game', ({ roomId }) => {
     //修改遊戲狀態=> finished
-    changeFinishStateToMap(roomId);
+    Room.changeFinishStateToMap(roomId);
     io.to(roomId).emit('finish state');
     io.to(roomId).emit('winner', {
       winnerName: socket.name,
@@ -93,43 +71,43 @@ io.on('connection', (socket) => {
     console.log('id.name', socket.name);
     //***重製所有人打字進度***//
     //先得到所有玩家的id
-    const users = getUsersProgressInMap(roomId);
+    const users = Room.getUsersProgressInMap(roomId);
     const arrOfUserId = Object.keys(users.users);
 
     console.log('arrOfUserId', arrOfUserId);
     //更新typed=0
     arrOfUserId.forEach((userId) => {
-      updateUsersProgressToMap(roomId, userId, 0);
+      Room.updateUsersProgressToMap(roomId, userId, 0);
     });
     //通知前端更新畫面
-    const usersProgress = getUsersProgressInMap(roomId);
+    const usersProgress = Room.getUsersProgressInMap(roomId);
     io.to(roomId).emit('send users progress', usersProgress);
   });
 
   //儲存文章
   socket.on('save article', ({ roomId, words }) => {
-    saveArticleToMap(roomId, words);
+    Room.saveArticleToMap(roomId, words);
   });
 
   //通知房客更新文章
   socket.on('update article', (roomId) => {
-    io.to(roomId).emit('get article', getArticleFromMap(roomId));
+    io.to(roomId).emit('get article', Room.getArticleFromMap(roomId));
   });
 
   //取得所有房客的名字、狀態
   socket.on('get users progress', (roomId) => {
-    const usersProgress = getUsersProgressInMap(roomId);
+    const usersProgress = Room.getUsersProgressInMap(roomId);
     io.to(roomId).emit('send users progress', usersProgress);
   });
 
   //更新房客打字狀態 (totalTyped)
   socket.on('update users progress', ({ roomId, totalTyped }) => {
     //先更新
-    updateUsersProgressToMap(roomId, socket.id, totalTyped);
+    Room.updateUsersProgressToMap(roomId, socket.id, totalTyped);
     // console.log('目前打了多少呢', totalTyped);
 
     //通知前端更新畫面
-    const usersProgress = getUsersProgressInMap(roomId);
+    const usersProgress = Room.getUsersProgressInMap(roomId);
     io.to(roomId).emit('send users progress', usersProgress);
   });
 
@@ -145,24 +123,19 @@ io.on('connection', (socket) => {
   // 當使用者斷線，要做leave room 動作
   socket.on('disconnect', () => {
     //找到使用者在哪一間rooms
-    const roomId = findUserInRoomInMap(socket.id);
+    const roomId = Room.findUserInRoomInMap(socket.id);
 
     //將使用者從roomMap紀錄移除
     if (roomId) {
-      removeUserFromRoomInMap(roomId, socket.id);
+      Room.removeUserFromRoomInMap(roomId, socket.id);
     }
 
     //通知前端更新畫面
-    const usersProgress = getUsersProgressInMap(roomId);
+    const usersProgress = Room.getUsersProgressInMap(roomId);
     io.to(roomId).emit('send users progress', usersProgress);
   });
 });
 
-app.use(function (err, req, res, next) {
-  console.log(err);
-  res.status(500).send('Internal Server Error');
-});
-
-server.listen(port, () =>
-  console.log(`Example app listening at http://localhost:${port}`)
+server.listen(PORT, () =>
+  console.log(`Example app listening at http://localhost:${PORT}`)
 );
