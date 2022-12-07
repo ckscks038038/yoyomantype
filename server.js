@@ -8,41 +8,16 @@ const { PORT } = process.env;
 
 const Room = require('./server/utils/roomMap');
 
+const {
+  createRoom,
+  checkRoom,
+  joinRoom,
+} = require('./server/socket/controllers/room_controller');
 // socket io
 io.on('connection', (socket) => {
-  //創建新房間
-  socket.on('create room', (roomId) => {
-    Room.createNewRoomToMap({
-      roomId: roomId,
-      ownerId: socket.id,
-      socket: socket,
-    });
-    socket.join(roomId);
-  });
-
-  //確認存在房間
-  socket.on('check room', (roomId) => {
-    if (Room.checkRoomIdExistInMap(roomId)) {
-      console.log(`檢查結果:存在${roomId}`);
-      socket.emit('join auth', { auth: true });
-    } else {
-      console.log(`檢查結果:不存在roomId ${roomId}`);
-      socket.emit('join auth', { auth: false });
-    }
-  });
-
-  //加入房間
-  socket.on('join room', (roomId) => {
-    if (Room.checkRoomIdExistInMap(roomId)) {
-      socket.join(roomId);
-      Room.JoinRoomToMap({ roomId: roomId, userId: socket.id, socket: socket });
-
-      //回傳文章給guest
-      socket.emit('get article', Room.getArticleFromMap(roomId));
-    } else {
-      console.log(`不存在roomId ${roomId}`);
-    }
-  });
+  socket.on('create room', createRoom);
+  socket.on('check room', checkRoom);
+  socket.on('join room', joinRoom);
 
   //開始遊戲
   socket.on('start game', (roomId) => {

@@ -20,7 +20,6 @@ const useMultiTypings = (enabled, words) => {
   const correctTyped = useRef(0);
   const keydownHandler = useCallback(
     ({ key, code }) => {
-      console.log('1');
       if (!enabled || !isKeyboardCodeAllowed(code)) {
         return;
       }
