@@ -6,7 +6,8 @@ const isKeyboardCodeAllowed = (code) => {
     code.startsWith('Key') ||
     code.startsWith('Digit') ||
     code === 'Backspace' ||
-    code === 'Space'
+    code === 'Space' ||
+    code === 'Minus'
   );
 };
 
@@ -19,6 +20,7 @@ const useMultiTypings = (enabled, words) => {
   const correctTyped = useRef(0);
   const keydownHandler = useCallback(
     ({ key, code }) => {
+      console.log('1');
       if (!enabled || !isKeyboardCodeAllowed(code)) {
         return;
       }
