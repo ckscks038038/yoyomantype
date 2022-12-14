@@ -35,19 +35,19 @@ To save your previous typing records, please login first. For multiplayer mode, 
 
 * start typing
 
-<img src="https://raw.githubusercontent.com/ckscks038038/yoyomantype/main/Archives/singlemode-1.gif" width="700" height="350"/>
+<img src="https://raw.githubusercontent.com/ckscks038038/yoyomantype/main/Archives/singlemode-1.gif" width="700" height="330"/>
 
 
 
 * typing result and replay
 
-<img src="https://raw.githubusercontent.com/ckscks038038/yoyomantype/main/Archives/replay.gif" width="700" height="350"/>
+<img src="https://raw.githubusercontent.com/ckscks038038/yoyomantype/main/Archives/replay.gif" width="700" height="330"/>
 
 ### multiplayer mode
 
 * create / join room
 
-<img src="https://raw.githubusercontent.com/ckscks038038/yoyomantype/main/Archives/enterroomcode.gif" width="700" height="350"/>
+<img src="https://raw.githubusercontent.com/ckscks038038/yoyomantype/main/Archives/enterroomcode.gif" width="700" height="330"/>
 
 
 * start game
