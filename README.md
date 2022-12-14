@@ -30,3 +30,27 @@ To save your previous typing records, please login first. For multiplayer mode, 
 * typing history with time-series charts
 
 ## Demo
+
+### single mode
+
+* start typing
+
+![This is a alt text.](https://raw.githubusercontent.com/ckscks038038/yoyomantype/main/Archives/singlemode-1.gif "This is a sample image.")
+
+* typing result and replay
+
+![This is a alt text.](https://raw.githubusercontent.com/ckscks038038/yoyomantype/main/Archives/replay.gif "This is a sample image.")
+
+### multiplayer mode
+
+* create / join room
+
+![This is a alt text.](https://raw.githubusercontent.com/ckscks038038/yoyomantype/main/Archives/enterroomcode.gif "This is a sample image.")
+
+* start game
+
+![This is a alt text.](https://raw.githubusercontent.com/ckscks038038/yoyomantype/main/Archives/starttypinggif.gif "This is a sample image.")
+
+* end game
+
+![This is a alt text.](https://raw.githubusercontent.com/ckscks038038/yoyomantype/main/Archives/endgame.gif "This is a sample image.")
