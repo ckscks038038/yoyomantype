@@ -57,3 +57,32 @@ To save your previous typing records, please login first. For multiplayer mode, 
 * end game
 
 <img src="https://raw.githubusercontent.com/ckscks038038/yoyomantype/main/Archives/endgame.gif" width="900" height="345"/>
+
+
+# technical stack
+
+### Front-End
+* React
+* React-router
+* Tailwind.css
+* Material UI
+
+### Back-End
+
+* Express
+* Socket.IO
+* Nginx
+* EC2 (AWS)
+* PostgreSQL
+* TimeScaleDB
+* Elasticsearch
+* Docker
+
+# System Architecture
+<img src="https://raw.githubusercontent.com/ckscks038038/yoyomantype/main/Archives/system-architecture.png" width="900" height="510"/>
+
+
+
+
+
+
