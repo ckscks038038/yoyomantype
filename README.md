@@ -17,7 +17,6 @@ Feel free to login with the account provided below.
 ```
 account: test40@test.com
 password: 1234
-
 ```
 To save your previous typing records, please login first. For multiplayer mode, there is no need to login before getting started.
 
