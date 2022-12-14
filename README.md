@@ -34,26 +34,26 @@ To save your previous typing records, please login first. For multiplayer mode, 
 
 * start typing
 
-<img src="https://raw.githubusercontent.com/ckscks038038/yoyomantype/main/Archives/singlemode-1.gif" width="1200" height="600"/>
+<img src="https://raw.githubusercontent.com/ckscks038038/yoyomantype/main/Archives/singlemode-1.gif" width="900" height="330"/>
 
 
 
 * typing result and replay
 
-<img src="https://raw.githubusercontent.com/ckscks038038/yoyomantype/main/Archives/replay.gif" width="1200" height="600"/>
+<img src="https://raw.githubusercontent.com/ckscks038038/yoyomantype/main/Archives/replay.gif" width="900" height="330"/>
 
 ### multiplayer mode
 
 * create / join room
 
-<img src="https://raw.githubusercontent.com/ckscks038038/yoyomantype/main/Archives/create-join-room.gif" width="1200" height="600"/>
+<img src="https://raw.githubusercontent.com/ckscks038038/yoyomantype/main/Archives/create-join-room.gif" width="900" height="330"/>
 
 
 * start game
 
 
-<img src="https://raw.githubusercontent.com/ckscks038038/yoyomantype/main/Archives/typing.gif" width="1200" height="600"/>
+<img src="https://raw.githubusercontent.com/ckscks038038/yoyomantype/main/Archives/typing.gif" width="730" height="250"/>
 
 * end game
 
-<img src="https://raw.githubusercontent.com/ckscks038038/yoyomantype/main/Archives/endgame.gif" width="1200" height="600"/>
+<img src="https://raw.githubusercontent.com/ckscks038038/yoyomantype/main/Archives/endgame.gif" width="730" height="250"/>
