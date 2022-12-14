@@ -1,3 +1,4 @@
+![This is a alt text.](https://raw.githubusercontent.com/ckscks038038/yoyomantype/main/yoyomantype.png "This is a sample image.")
 # YOYOMANTYPE
 
 > An interative typing practice website inspired by the typing legend - monkeytype. Provides customized wrong words recommandation, replay typing record and multiplayer mode.
