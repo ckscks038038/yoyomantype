@@ -25,7 +25,7 @@ To save your previous typing records, please login first. For multiplayer mode, 
 * accuracy, cpm, and replay each game
 * customized wrong words recommendation system
 * account system
-* multiplayer mode to connect and compete with friends
+* many-to-many multiplayer mode to compete with friends
 * typing history with time-series charts
 
 ## Demo
