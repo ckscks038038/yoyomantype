@@ -35,17 +35,20 @@ To save your previous typing records, please login first. For multiplayer mode, 
 
 * start typing
 
-![This is a alt text.](https://raw.githubusercontent.com/ckscks038038/yoyomantype/main/Archives/singlemode-1.gif "This is a sample image.")
+<img src="https://raw.githubusercontent.com/ckscks038038/yoyomantype/main/Archives/singlemode-1.gif" width="700" height="350"/>
+
+
 
 * typing result and replay
 
-![This is a alt text.](https://raw.githubusercontent.com/ckscks038038/yoyomantype/main/Archives/replay.gif "This is a sample image.")
+<img src="https://raw.githubusercontent.com/ckscks038038/yoyomantype/main/Archives/replay.gif" width="700" height="350"/>
 
 ### multiplayer mode
 
 * create / join room
 
-![This is a alt text.](https://raw.githubusercontent.com/ckscks038038/yoyomantype/main/Archives/enterroomcode.gif "This is a sample image.")
+<img src="https://raw.githubusercontent.com/ckscks038038/yoyomantype/main/Archives/enterroomcode.gif" width="700" height="350"/>
+
 
 * start game
 
