@@ -46,13 +46,14 @@ To save your previous typing records, please login first. For multiplayer mode, 
 
 * create / join room
 
-<img src="https://raw.githubusercontent.com/ckscks038038/yoyomantype/main/Archives/enterroomcode.gif" width="700" height="330"/>
+<img src="https://raw.githubusercontent.com/ckscks038038/yoyomantype/main/Archives/create-join-room.gif" width="700" height="330"/>
 
 
 * start game
 
-![This is a alt text.](https://raw.githubusercontent.com/ckscks038038/yoyomantype/main/Archives/starttypinggif.gif "This is a sample image.")
+
+<img src="https://raw.githubusercontent.com/ckscks038038/yoyomantype/main/Archives/typing.gif" width="730" height="250"/>
 
 * end game
 
-![This is a alt text.](https://raw.githubusercontent.com/ckscks038038/yoyomantype/main/Archives/endgame.gif "This is a sample image.")
+<img src="https://raw.githubusercontent.com/ckscks038038/yoyomantype/main/Archives/endgame.gif" width="730" height="250"/>
