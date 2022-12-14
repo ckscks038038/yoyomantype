@@ -1,4 +1,4 @@
-![This is a alt text.](https://raw.githubusercontent.com/ckscks038038/yoyomantype/main/yoyomantype.png "This is a sample image.")
+![This is a alt text.](https://raw.githubusercontent.com/ckscks038038/yoyomantype/main/Archives/yoyomantype.png "This is a sample image.")
 # YOYOMANTYPE
 
 > An interative typing practice website inspired by the typing legend - monkeytype. Provides customized wrong words recommandation, replay typing record and multiplayer mode.
@@ -27,4 +27,6 @@ To save your previous typing records, please login first. For multiplayer mode, 
 * customized wrong words recommendation system
 * account system
 * multiplayer mode to connect and compete with friends
-* typing history with time-series charts 
+* typing history with time-series charts
+
+## Demo
