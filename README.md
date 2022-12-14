@@ -79,7 +79,7 @@ To save your previous typing records, please login first. For multiplayer mode, 
 * Docker
 
 # System Architecture
-<img src="https://raw.githubusercontent.com/ckscks038038/yoyomantype/main/Archives/system-architecture.png" width="900" height="540"/>
+<img src="https://raw.githubusercontent.com/ckscks038038/yoyomantype/main/Archives/system-architecture.png" width="780" height="540"/>
 
 
 
